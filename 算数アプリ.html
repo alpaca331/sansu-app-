@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>さんすうアドベンチャー</title>
+  <style>
+    body { text-align: center; font-family: 'Helvetica Neue', Arial, sans-serif; padding: 15px; background-color: #f7f9fc; color: #333; margin: 0; }
+    .container { max-width: 480px; margin: 0 auto; background: white; padding: 25px; border-radius: 24px; box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
+    h2 { color: #ff6b6b; font-size: 26px; margin-top: 0; }
+    .subtitle { font-size: 16px; color: #7f8c8d; margin-bottom: 20px; }
+    .quiz-box { background: #fffcf0; padding: 20px; border-radius: 18px; margin-bottom: 20px; border: 3px dashed #ffcb74; }
+    .graphic { font-size: 42px; margin: 12px 0; font-weight: bold; }
+    input[type="number"] { font-size: 40px; width: 110px; text-align: center; padding: 8px; border: 3px solid #b2bec3; border-radius: 16px; background-color: #fafafa; margin-bottom: 10px; }
+    button { font-size: 20px; padding: 14px 28px; margin: 8px; border-radius: 50px; border: none; font-weight: bold; cursor: pointer; box-shadow: 0 5px 10px rgba(0,0,0,0.1); }
+    .btn-type { background-color: #2ecc71; color: white; }
+    .btn-mic { background-color: #3498db; color: white; }
+    .btn-reset { background-color: #ffeaa7; color: #d35400; font-size: 13px; padding: 6px 14px; margin-top: 40px; box-shadow: none; border-radius: 8px; }
+    #result { font-size: 30px; font-weight: bold; margin: 20px 0; min-height: 40px; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h2>🚂 さんすうアドベンチャー </h2>
+  <div class="subtitle">おてて忍者クイズ！にんにん！</div>
+
+  <div class="quiz-box">
+    <div class="graphic" id="g1"></div>
+    <div class="graphic" id="g2"></div>
+    <p style="font-size: 19px; font-weight: bold; margin: 15px 0 0 0;">あわせて 何本に なるかな？</p>
+  </div>
+
+  <div class="input-area" id="interactive-zone">
+    <input type="number" id="answer" pattern="[0-9]*" inputmode="numeric" placeholder="?"><br>
+    <button class="btn-type" onclick="checkAnswer()">👆 こたえる</button>
+    <button class="btn-mic" onclick="startMic()">🎤 声でこたえる</button>
+  </div>
+
+  <div id="result"></div>
+  <button class="btn-reset" onclick="resetGame()">さいしょ(1+1)からやりなおす</button>
+</div>
+
+<script>
+  let currentNum1 = 1;
+  let currentNum2 = 1;
+  let isAnswered = false;
+
+  // 起動時にブラウザの記憶（localStorage）から前回の続きを読み込む
+  window.onload = function() {
+    currentNum1 = parseInt(localStorage.getItem('math_num1')) || 1;
+    currentNum2 = parseInt(localStorage.getItem('math_num2')) || 1;
+    setupQuestion();
+  };
+
+  function getFingerGraphic(num) {
+    if (num === 1) return "☝️ (1)";
+    if (num === 2) return "✌️ (2)";
+    if (num === 3) return "☝️☝️☝️ (3)";
+    if (num === 4) return "☝️☝️☝️☝️ (4)";
+    if (num === 5) return "🖐️ (5)";
+    return "";
+  }
+
+  function setupQuestion() {
+    isAnswered = false;
+    document.getElementById('g1').innerHTML = "👇 さいしょは...<br>" + getFingerGraphic(currentNum1);
+    document.getElementById('g2').innerHTML = "👇 つぎに...<br>" + getFingerGraphic(currentNum2);
+    document.getElementById('answer').value = "";
+    document.getElementById('result').innerHTML = "";
+    document.getElementById('answer').focus();
+    speak(`つぎのもんだい。さいしょは、${currentNum1}。つぎに、${currentNum2}。あわせて、なんぼんかな？`);
+  }
+
+  function advanceToNextQuestion() {
+    currentNum2++;
+    if (currentNum2 > 5) { currentNum1++; currentNum2 = 1; }
+    if (currentNum1 > 5) { currentNum1 = 1; currentNum2 = 1; }
+    
+    // 次の問題をブラウザに記憶させる
+    localStorage.setItem('math_num1', currentNum1);
+    localStorage.setItem('math_num2', currentNum2);
+    
+    setTimeout(setupQuestion, 2000); // 2秒後に次の問題へ
+  }
+
+  function checkAnswer(voiceInput) {
+    if (isAnswered) return;
+    let val = voiceInput || document.getElementById('answer').value;
+    if (!val) return;
+
+    const correctAnswer = currentNum1 + currentNum2;
+    let parsedVal = parseInt(val);
+    
+    const textAnswers = ['ぜろ','いち','に','さん','し','ご','ろく','なな','はち','きゅう','じゅう'];
+    const kanjiAnswers = ['〇','一','二','三','四','五','六','七','八','九','十'];
+    if (isNaN(parsedVal)) {
+      if (textAnswers.includes(val)) parsedVal = textAnswers.indexOf(val);
+      if (kanjiAnswers.includes(val)) parsedVal = kanjiAnswers.indexOf(val);
+    }
+
+    let resultDiv = document.getElementById('result');
+    if (parsedVal === correctAnswer) {
+      isAnswered = true;
+      resultDiv.innerHTML = "🌸 大せいかい！ 🌸";
+      resultDiv.style.color = "#ff1493";
+      speak("だいせいかい！すごいぞ！");
+      advanceToNextQuestion();
+    } else {
+      resultDiv.innerHTML = "❌ もういっかい！";
+      resultDiv.style.color = "#d32f2f";
+      speak("もういっかい、かぞえてみよう！");
+    }
+  }
+
+  function startMic() {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      alert("お使いの端末はマイク認識に対応していません💦"); return;
+    }
+    const recognition = new SpeechRecognition();
+    recognition.lang = 'ja-JP';
+    recognition.start();
+
+    document.getElementById('result').innerHTML = "🎤 きいてるよぉ...";
+    document.getElementById('result').style.color = "#3498db";
+
+    recognition.onresult = function(event) {
+      const spokenText = event.results[0][0].transcript;
+      document.getElementById('answer').value = spokenText;
+      checkAnswer(spokenText);
+    };
+    recognition.onerror = function() {
+      document.getElementById('result').innerHTML = "もういちど喋ってみてね！";
+      document.getElementById('result').style.color = "#7f8c8d";
+    };
+  }
+
+  function speak(text) {
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+      const msg = new SpeechSynthesisUtterance(text);
+      msg.lang = 'ja-JP'; msg.rate = 1.15;
+      window.speechSynthesis.speak(msg);
+    }
+  }
+
+  function resetGame() {
+    if (confirm("ほんとうに 1 + 1 から やりなおす？")) {
+      currentNum1 = 1; currentNum2 = 1;
+      localStorage.setItem('math_num1', 1);
+      localStorage.setItem('math_num2', 1);
+      setupQuestion();
+    }
+  }
+</script>
+
+</body>
+</html>
