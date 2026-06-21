@@ -317,25 +317,28 @@
         unlocked.push(getIdx);
         localStorage.setItem('unlocked_kaden_math', JSON.stringify(unlocked));
 
+        // ★修正：アニメーション（monster-anim）を適用し、読み上げを最後に「ゲットだぜ！」で締めるようにしました
         resultDiv.innerHTML = `🌸 大せいかい！ 🌸<br>
-          <div style="font-size:16px; margin-top:10px; background:#fff3cd; padding:10px; border-radius:10px; border:2px solid #ffc107;">
-            ✨ かでんゲット！ ✨<br>
-            <span class="monster-anim" style="font-size:50px; margin-top:5px;">${kadenList[getIdx].e}</span><br>
-            <strong style="font-size:18px;color:#d35400;">${kadenList[getIdx].n}</strong>
+          <div style="font-size:16px; margin-top:10px; background:#fff3cd; padding:15px; border-radius:15px; border:3px solid #ffc107;">
+            <div class="monster-anim" style="font-size:70px; display:inline-block;">${kadenList[getIdx].e}</div><br>
+            <strong style="font-size:22px;color:#d35400;">${kadenList[getIdx].n}</strong><br>
+            ✨ ゲットだぜ！ ✨
           </div>`;
-        speak(`だいせいかい！あたらしいかでん、${kadenList[getIdx].n}を、ゲットしたよ！`);
+        
+        // ★修正：読み上げを家電の名前＋ゲットだぜ！で完結させる（途中で切れないように工夫）
+        speak(`${kadenList[getIdx].n}、ゲットだぜ！`);
       } else {
         resultDiv.innerHTML = '🌸 大せいかい！ 🌸<br><span style="font-size:16px;">(か電ずかんコンプリート！)</span>';
-        speak("だいせいかい！すごいぞ！");
+        speak("だいせいかい！ずかんコンプリートだ！");
       }
       
-      setTimeout(advanceToNextQuestion, 2500); 
+      // ★修正：3秒（3000ms）待つことで、アニメーションをしっかり見せてから次へ
+      setTimeout(advanceToNextQuestion, 3000); 
     } else {
       resultDiv.innerHTML = "❌ もういっかい！";
       resultDiv.style.color = "#d32f2f";
       speak("もういっかい、かぞえてみよう！");
     }
-  }
 
   function startMic() {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
