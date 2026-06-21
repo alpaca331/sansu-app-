@@ -11,7 +11,6 @@
     h2 { color: #ff6b6b; font-size: 26px; margin-top: 0; }
     .subtitle { font-size: 16px; color: #7f8c8d; margin-bottom: 20px; }
     
-    /* TOP画面のボタンデザイン */
     .btn-mode { font-size: 20px; padding: 15px; margin: 10px 0; width: 100%; border-radius: 15px; border: none; font-weight: bold; cursor: pointer; color: white; box-shadow: 0 4px 6px rgba(0,0,0,0.1); line-height: 1.4; transition: transform 0.1s; }
     .btn-mode:active { transform: scale(0.97); }
     .mode-add { background-color: #ff7675; }
@@ -21,7 +20,6 @@
     .mode-zukan { background-color: #f1c40f; color: #333; margin-top: 20px; border: 3px solid #f39c12; }
     .sub-text { font-size: 14px; font-weight: normal; opacity: 0.9; }
 
-    /* ゲーム画面のデザイン */
     .quiz-box { background: #fffcf0; padding: 15px; border-radius: 18px; margin-bottom: 20px; border: 3px dashed #ffcb74; }
     .graphic { font-size: 30px; margin: 8px 0; font-weight: bold; line-height: 1.2; word-wrap: break-word; }
     input[type="number"] { font-size: 40px; width: 110px; text-align: center; padding: 8px; border: 3px solid #b2bec3; border-radius: 16px; background-color: #fafafa; margin-bottom: 10px; }
@@ -31,13 +29,13 @@
     .btn-reset { background-color: #ffeaa7; color: #d35400; font-size: 13px; padding: 8px 16px; margin-top: 15px; box-shadow: none; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; }
     #result { font-size: 30px; font-weight: bold; margin: 15px 0; min-height: 40px; }
 
-    /* モンスターずかんのデザイン */
-    .zukan-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-top: 15px; max-height: 450px; overflow-y: auto; padding: 10px; background: #fffcf0; border-radius: 10px; border: 3px dashed #ffcb74; }
-    .zukan-item { font-size: 30px; background: white; border-radius: 8px; padding: 5px; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-    .zukan-item.locked { background: #e0e0e0; color: #aaa; font-size: 20px; line-height: 40px; }
+    .zukan-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 15px; max-height: 450px; overflow-y: auto; padding: 10px; background: #fffcf0; border-radius: 10px; border: 3px dashed #ffcb74; }
+    .zukan-item { background: white; border-radius: 8px; padding: 8px 4px; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.1); display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 65px; }
+    .zukan-item .zukan-emoji { font-size: 24px; }
+    .zukan-item .zukan-name { font-size: 9px; color: #555; margin-top: 4px; line-height: 1.1; word-break: break-all; }
+    .zukan-item.locked { background: #e0e0e0; color: #aaa; font-size: 18px; }
     .count-text { font-size: 20px; font-weight: bold; color: #e67e22; }
 
-    /* モンスター登場アニメーション */
     @keyframes bounce {
       0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
       40% { transform: translateY(-20px); }
@@ -69,7 +67,7 @@
   </button>
 
   <button class="btn-mode mode-zukan" onclick="showZukan()">
-    📖 モンスターずかんを見る
+    📖 か電ずかんを見る
   </button>
 </div>
 
@@ -96,32 +94,73 @@
 </div>
 
 <div class="container" id="zukan-screen" style="display: none;">
-  <h2>📖 モンスターずかん</h2>
-  <div class="count-text">あつめた数: <span id="zukan-count">0</span> / 100</div>
+  <h2>📖 か電ずかん</h2>
+  <div class="count-text">あつめた数: <span id="zukan-count">0</span> / 200</div>
   
-  <div class="zukan-grid" id="zukan-grid">
-    </div>
+  <div class="zukan-grid" id="zukan-grid"></div>
 
   <button class="btn-reset" style="font-size: 16px; padding: 12px 24px; margin-top: 20px;" onclick="goBackToTop()">🏠 トップにもどる</button>
 </div>
 
 <script>
-  // 全部で100種類のモンスター（絵文字）リスト
-  const monsterList = "👾,👽,👻,👹,👺,🤖,🎃,😺,😸,😹,😻,😼,😽,🙀,😿,😾,🙈,🙉,🙊,🐵,🐒,🦍,🦧,🐶,🐕,🦮,🐩,🐺,🦊,🦝,🐱,🐈,🦁,🐯,🐅,🐆,🐴,🐎,🦄,🦓,🦌,🦬,🐮,🐂,🐃,🐄,🐷,🐖,🐗,🐽,🐏,🐑,🐐,🐪,🐫,🦙,🦒,🐘,🦣,🦏,🦛,🐭,🐁,🐀,🐹,🐰,🐇,🐿,🦫,🦔,🦇,🐻,🐨,🐼,🦥,🦦,🦨,🦘,🦡,🦃,🐔,🐓,🐣,🐤,🐥,🐦,🐧,🕊,🦅,🦆,🦢,🦉,🦤,🦩,🦚,🦜,🐸,🐊,🐢,🦎,🐍".split(",");
+  // 200種類のか電・ガジェット・機械データリスト
+  const kadenList = [
+    {n:"るーむえあこん", e:"❄️"}, {n:"えきしょうてれび", e:"📺"}, {n:"どらむしきせんたくき", e:"🌀"}, {n:"れいぞうこ", e:"🧊"}, {n:"でんじれんじ", e:"⚡"},
+    {n:"すいはんき", e:"🍚"}, {n:"そうじき", e:"🧹"}, {n:"くうきせいじょうき", e:"🍃"}, {n:"せんぷうき", e:"💨"}, {n:"どらいやー", e:"💨"},
+    {n:"のーとぱそこん", e:"💻"}, {n:"すまーとほん", e:"📱"}, {n:"たぶれっと", e:"📲"}, {n:"すまーとうぉっち", e:"⌚"}, {n:"げーむき", e:"🎮"},
+    {n:"おーぶんとおすたー", e:"🍞"}, {n:"でんきけとる", e:"🫖"}, {n:"こーひーめーかー", e:"☕"}, {n:"しょっきあらいき", e:"🍽️"}, {n:"ほっとぷれーと", e:"🍳"},
+    {n:"じどうはんばいき", e:"🥤"}, {n:"れいとうしょーけーす", e:"🥶"}, {n:"すまーとすぴーかー", e:"🔊"}, {n:"ろぼっとそうじき", e:"🤖"}, {n:"でんきはぶらし", e:"🪥"},
+    {n:"びでおかめら", e:"📹"}, {n:"でじたるかめら", e:"📷"}, {n:"ぷろじぇくたー", e:"📽️"}, {n:"ぷりんたー", e:"🖨️"}, {n:"へっどほん", e:"🎧"},
+    {n:"わいやれすいやほん", e:"🎧"}, {n:"らじお", e:"📻"}, {n:"でんきもうふ", e:"🛏️"}, {n:"こたつ", e:"🪵"}, {n:"でんきすとーぶ", e:"🔥"},
+    {n:"かしつき", e:"💧"}, {n:"じょしつき", e:"🌬️"}, {n:"みきさー", e:"🍹"}, {n:"わっふるめーかー", e:"🧇"}, {n:"ぽっぷこーんましん", e:"🍿"},
+    {n:"かきごおりき", e:"🍧"}, {n:"でんきあつりょくなべ", e:"🍲"}, {n:"ほーむべーかりー", e:"🍞"}, {n:"わいんせらー", e:"🍾"}, {n:"すもーくましん", e:"💨"},
+    {n:"しーりんぐらいと", e:"💡"}, {n:"かいちゅうdeんとう", e:"🔦"}, {n:"いるみねーしょん", e:"✨"}, {n:"ですくらいと", e:"💡"}, {n:"そーらーぱねる", e:"☀️"},
+    {n:"じゅうでんき", e:"🔌"}, {n:"もばいるばってりー", e:"🔋"}, {n:"じどうどあ", e:"🚪"}, {n:"えすかれーたー", e:"🪜"}, {n:"えれべーたー", e:"🛗"},
+    {n:"じどうかいさつき", e:"🎫"}, {n:"れいぞうとらっく", e:"🚚"}, {n:"でんきじどうしゃ", e:"🚗"}, {n:"はいぶりっどかー", e:"🚘"}, {n:"でんきばイク", e:"🏍️"},
+    {n:"denきじてんしゃ", e:"🚲"}, {n:"どろーん", e:"🛸"}, {n:"らじこんかー", e:"🏎️"}, {n:"でんきぷられーる", e:"🚂"}, {n:"がちゃがちゃましん", e:"🪙"},
+    {n:"すまーときー", e:"🔑"}, {n:"じどうきゅうゆき", e:"⛽"}, {n:"でんきどりる", e:"🔧"}, {n:"でんきはんまー", e:"🔨"}, {n:"でんきちぇーんそー", e:"🪓"},
+    {n:"はんだごて", e:"🔥"}, {n:"でんきようせつき", e:"⚡"}, {n:"3Dぷりんたー", e:"🖨️"}, {n:"れーざーかったー", e:"⚡"}, {n:"ぼうはんかめら", e:"📷"},
+    {n:"てんもんぼうえんきょう", e:"🔭"}, {n:"でんぱあんてな", e:"📡"}, {n:"すまーとめーたー", e:"⏱️"}, {n:"でんきばいおりん", e:"🎻"}, {n:"えレきぎたー", e:"🎸"},
+    {n:"でんしぴあの", e:"🎹"}, {n:"でんしどらむ", e:"🥁"}, {n:"しんせさいざー", e:"🎹"}, {n:"DJみきさー", e:"🎛️"}, {n:"うーはーすぴーかー", e:"🔊"},
+    {n:"めがほん", e:"📢"}, {n:"ぼいすちぇんじゃー", e:"🎙️"}, {n:"からおけましん", e:"🎤"}, {n:"すろっとましん", e:"🎰"}, {n:"くれーんげーむ", e:"🕹️"},
+    {n:"どあほん", e:"🔔"}, {n:"おんすいせんじょうべんざ", e:"🚽"}, {n:"でんきおんすいき", e:"♨️"}, {n:"IHくっきんぐひーたー", e:"🍳"}, {n:"ふーどぷろせっさー", e:"🧄"},
+    {n:"なまごみしょりき", e:"🗑️"}, {n:"ふとんかんそうき", e:"🛏️"}, {n:"ずぼんぷれっさー", e:"👖"}, {n:"あしおんき", e:"🧦"}, {n:"でんきあんか", e:"🔥"},
+    {n:"しゅれっだー", e:"📄"}, {n:"たいむれこーだー", e:"⏱️"}, {n:"でんきえんぴつけずり", e:"✏️"}, {n:"らみねーたー", e:"📄"}, {n:"でんたく", e:"🧮"},
+    {n:"ばーこーどりーだー", e:"🔍"}, {n:"れじすたー", e:"💰"}, {n:"こぴーき", e:"🖨️"}, {n:"すきゃなー", e:"📄"}, {n:"3Dすきゃなー", e:"🔍"},
+    {n:"でんきしぇーばー", e:"🪒"}, {n:"はなげかったー", e:"✂️"}, {n:"びがんき", e:"✨"}, {n:"ひかりびようき", e:"⚡"}, {n:"まっさーじちぇあ", e:"💺"},
+    {n:"ふっとまっさーじゃー", e:"🦶"}, {n:"ていしゅうはちりょうき", e:"⚡"}, {n:"でんきべっど", e:"🛏️"}, {n:"らいとつきみらー", e:"🪞"}, {n:"へああいろん", e:"💇"},
+    {n:"でんきぽっと", e:"🫖"}, {n:"びーるさーばー", e:"🍺"}, {n:"うぉーたーさーばー", e:"💧"}, {n:"ちょこれーとふぁうんてん", e:"🍫"}, {n:"わたあめましん", e:"☁️"},
+    {n:"くれーぷめーかー", e:"🍳"}, {n:"あいすくりーむめーかー", e:"🍨"}, {n:"よーぐるとめーかー", e:"🥛"}, {n:"でんきふらいやー", e:"🍤"}, {n:"すちーむくっかー", e:"💨"},
+    {n:"ほっとさんどめーかー", e:"🥪"}, {n:"ふぃっしゅろーすたー", e:"🐟"}, {n:"でんきぐりるなべ", e:"🍲"}, {n:"ほおんじゃー", e:"🍚"}, {n:"れいおんこ", e:"📦"},
+    {n:"そーだましん", e:"🥤"}, {n:"すろーじゅーさー", e:"🍹"}, {n:"はんどみきさー", e:"🥚"}, {n:"じどうちょうりなべ", e:"🍲"}, {n:"ふっとばす", e:"🦶"},
+    {n:"でんきみしん", e:"🧵"}, {n:"けだまとりき", e:"👕"}, {n:"くつかんそうき", e:"👟"}, {n:"ちょうおんぱせんじょうき", e:"👓"}, {n:"でんきどらいばー", e:"🔧"},
+    {n:"でんきさんだー", e:"🔧"}, {n:"でんきじぐそー", e:"🪓"}, {n:"こうあつせんじょうき", e:"🚿"}, {n:"しばかりき", e:"🌱"}, {n:"ぶろわー", e:"💨"},
+    {n:"でんきくさかりき", e:"🌱"}, {n:"おいるひーたー", e:"🔥"}, {n:"ぱねるひーたー", e:"🔥"}, {n:"せらみっくふぁんひーたー", e:"🔥"}, {n:"がすふぁんひーたー", e:"🔥"},
+    {n:"せきゆすとーぶ", e:"🔥"}, {n:"れいふうせん", e:"💨"}, {n:"すぽっとくーらー", e:"❄️"}, {n:"じょしつかんそうき", e:"💨"}, {n:"だつしゅうき", e:"🍃"},
+    {n:"だつしゅうはんがー", e:"👔"}, {n:"あいろん", e:"💨"}, {n:"いるいすちーまー", e:"💨"}, {n:"はんでぃくりーなー", e:"🧹"}, {n:"すてぃっくくりーなー", e:"🧹"},
+    {n:"ふとんくりーなー", e:"🛏️"}, {n:"みずぶきろぼっと", e:"🤖"}, {n:"まどふきろぼっと", e:"🤖"}, {n:"でんどうぱとかー", e:"🚓"}, {n:"せんさーらいと", e:"💡"},
+    {n:"じどうきゅうじき", e:"🍖"}, {n:"じどうきゅうすいき", e:"💧"}, {n:"でんききっくぼーど", e:"🛴"}, {n:"しにあかー", e:"🚗"}, {n:"でんきくるまいす", e:"💺"},
+    {n:"せぐうえい", e:"🛴"}, {n:"ほばーぼーど", e:"🛹"}, {n:"かんでんちじゅうでんき", e:"🔋"}, {n:"ぽーたぶるでんげん", e:"🔋"}, {n:"とうこうき", e:"💡"},
+    {n:"でんきえあぽんぷ", e:"💨"}, {n:"どらいぶれこーだー", e:"📷"}, {n:"かーなび", e:"🗺️"}, {n:"しゃさいれいぞうこ", e:"🧊"}, {n:"ちょうおんぱかしつき", e:"💧"},
+    {n:"あろまでぃふゅーざー", e:"🍃"}, {n:"すまーとちぇあ", e:"💺"}, {n:"でんどうのこぎり", e:"🪓"}, {n:"たいようこうぱねる", e:"☀️"}, {n:"でんきなべ", e:"🍲"},
+    {n:"すまーとりんぐ", e:"💍"}, {n:"わいやれすじゅうでんき", e:"🔌"}, {n:"でんどうねじまわし", e:"🔧"}, {n:"でんしじしょ", e:"📕"}, {n:"たいじゅうけい", e:"⚖️"},
+    {n:"でんしこくばん", e:"📋"}, {n:"でんどうしゃったー", e:"🚪"}, {n:"でんどうるーばー", e:"🪟"}, {n:"じどうかんきせん", e:"💨"}, {n:"でんどうぶらいんど", e:"🪟"},
+    {n:"すまーとろっく", e:"🔑"}, {n:"じどうみずやりき", e:"🚿"}, {n:"でんきさく", e:"⚡"}, {n:"でんどうぽんぷ", e:"💨"}, {n:"でんきおんしつ", e:"🏠"},
+    {n:"じどうそーたー", e:"⚙️"}, {n:"でんきろ", e:"🔥"}, {n:"れーざーすきゃなー", e:"🔍"}, {n:"でんどうりふたー", e:"🏗️"}, {n:"じどうこんべあ", e:"⛓️"},
+    {n:"でんしはかり", e:"⚖️"}, {n:"でじたるのぎす", e:"📏"}, {n:"でんどうぐらいんだー", e:"🔧"}, {n:"でんどうぽりっしゃー", e:"🔧"}, {n:"すまーとふぁん", e:"💨"}
+  ];
 
   let currentMode = 'add_seq';
   let currentNum1 = 1;
   let currentNum2 = 1;
   let isAnswered = false;
 
-  // アプリを開いた時はTOP画面だけを表示
   window.onload = function() {
     document.getElementById('top-screen').style.display = 'block';
     document.getElementById('game-screen').style.display = 'none';
     document.getElementById('zukan-screen').style.display = 'none';
   };
 
-  // モードを選んでゲームスタート
   function startGame(mode) {
     currentMode = mode;
     document.getElementById('top-screen').style.display = 'none';
@@ -146,7 +185,6 @@
     setupQuestion();
   }
 
-  // トップ画面に戻る
   function goBackToTop() {
     document.getElementById('game-screen').style.display = 'none';
     document.getElementById('zukan-screen').style.display = 'none';
@@ -154,18 +192,17 @@
     if ('speechSynthesis' in window) window.speechSynthesis.cancel();
   }
 
-  // ずかん画面を表示
   function showZukan() {
     document.getElementById('top-screen').style.display = 'none';
     document.getElementById('zukan-screen').style.display = 'block';
 
-    let unlocked = JSON.parse(localStorage.getItem('unlocked_monsters') || '[]');
+    let unlocked = JSON.parse(localStorage.getItem('unlocked_kaden_math') || '[]');
     document.getElementById('zukan-count').innerText = unlocked.length;
 
     let gridHtml = '';
-    for(let i=0; i<100; i++) {
+    for(let i=0; i<200; i++) {
       if (unlocked.includes(i)) {
-        gridHtml += `<div class="zukan-item">${monsterList[i]}</div>`;
+        gridHtml += `<div class="zukan-item"><span class="zukan-emoji">${kadenList[i].e}</span><span class="zukan-name">${kadenList[i].n}</span></div>`;
       } else {
         gridHtml += `<div class="zukan-item locked">❓</div>`;
       }
@@ -173,7 +210,6 @@
     document.getElementById('zukan-grid').innerHTML = gridHtml;
   }
 
-  // ランダム問題の作成
   function setRandomAdd() {
     currentNum1 = Math.floor(Math.random() * 9) + 1; 
     currentNum2 = Math.floor(Math.random() * 10) + 1; 
@@ -183,7 +219,6 @@
     currentNum1 = currentNum2 + Math.floor(Math.random() * 9) + 1; 
   }
 
-  // 手のグラフィックを作る（19まで対応）
   function getFingerGraphic(num) {
     let hands = "";
     let n = num;
@@ -195,7 +230,6 @@
     return hands + " (" + num + ")";
   }
 
-  // 問題を画面にセットする
   function setupQuestion() {
     isAnswered = false;
     let questionText = "";
@@ -220,7 +254,6 @@
     speak(speechText);
   }
 
-  // 次の問題へ進む（※ここは表示と記憶の更新のみ）
   function advanceToNextQuestion() {
     if (currentMode === 'add_seq') {
       currentNum2++;
@@ -248,11 +281,9 @@
     else if (currentMode === 'sub_rand') {
       setRandomSub();
     }
-    
     setupQuestion();
   }
 
-  // 正解・不正解の判定とモンスターゲット処理
   function checkAnswer(voiceInput) {
     if (isAnswered) return;
     let val = voiceInput || document.getElementById('answer').value;
@@ -277,31 +308,27 @@
       isAnswered = true;
       resultDiv.style.color = "#ff1493";
       
-      // モンスター図鑑の処理
-      let unlocked = JSON.parse(localStorage.getItem('unlocked_monsters') || '[]');
-      if (unlocked.length < 100) {
-        // まだ持っていないモンスターからランダムに1つ選ぶ
+      let unlocked = JSON.parse(localStorage.getItem('unlocked_kaden_math') || '[]');
+      if (unlocked.length < 200) {
         let available = [];
-        for(let i=0; i<100; i++) { if(!unlocked.includes(i)) available.push(i); }
+        for(let i=0; i<200; i++) { if(!unlocked.includes(i)) available.push(i); }
         let getIdx = available[Math.floor(Math.random() * available.length)];
         
         unlocked.push(getIdx);
-        localStorage.setItem('unlocked_monsters', JSON.stringify(unlocked));
+        localStorage.setItem('unlocked_kaden_math', JSON.stringify(unlocked));
 
-        // ゲット画面の表示
         resultDiv.innerHTML = `🌸 大せいかい！ 🌸<br>
           <div style="font-size:16px; margin-top:10px; background:#fff3cd; padding:10px; border-radius:10px; border:2px solid #ffc107;">
-            ✨ モンスターゲット！ ✨<br>
-            <span class="monster-anim" style="font-size:50px; margin-top:5px;">${monsterList[getIdx]}</span>
+            ✨ かでんゲット！ ✨<br>
+            <span class="monster-anim" style="font-size:50px; margin-top:5px;">${kadenList[getIdx].e}</span><br>
+            <strong style="font-size:18px;color:#d35400;">${kadenList[getIdx].n}</strong>
           </div>`;
-        speak("だいせいかい！あたらしいモンスターを、ゲットしたよ！");
+        speak(`だいせいかい！あたらしいかでん、${kadenList[getIdx].n}を、ゲットしたよ！`);
       } else {
-        // ▼【ここがエラーの原因でした。外側をシングルクォーテーションに修正しました】▼
-        resultDiv.innerHTML = '🌸 大せいかい！ 🌸<br><span style="font-size:16px;">(ずかんコンプリート！)</span>';
+        resultDiv.innerHTML = '🌸 大せいかい！ 🌸<br><span style="font-size:16px;">(か電ずかんコンプリート！)</span>';
         speak("だいせいかい！すごいぞ！");
       }
       
-      // 少し長め（2.5秒）に待ってから次の問題へ（モンスターを見るため）
       setTimeout(advanceToNextQuestion, 2500); 
     } else {
       resultDiv.innerHTML = "❌ もういっかい！";
@@ -310,7 +337,6 @@
     }
   }
 
-  // マイク認識
   function startMic() {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!SpeechRecognition) {
@@ -334,7 +360,6 @@
     };
   }
 
-  // 音声読み上げ
   function speak(text) {
     if ('speechSynthesis' in window) {
       window.speechSynthesis.cancel();
@@ -344,7 +369,6 @@
     }
   }
 
-  // リセットボタン
   function resetGame() {
     if (confirm("ほんとうに さいしょから やりなおす？")) {
       if (currentMode === 'add_seq') {
