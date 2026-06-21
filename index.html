@@ -103,7 +103,6 @@
 </div>
 
 <script>
-  // 200種類のか電・ガジェット・機械データリスト
   const kadenList = [
     {n:"るーむえあこん", e:"❄️"}, {n:"えきしょうてれび", e:"📺"}, {n:"どらむしきせんたくき", e:"🌀"}, {n:"れいぞうこ", e:"🧊"}, {n:"でんじれんじ", e:"⚡"},
     {n:"すいはんき", e:"🍚"}, {n:"そうじき", e:"🧹"}, {n:"くうきせいじょうき", e:"🍃"}, {n:"せんぷうき", e:"💨"}, {n:"どらいやー", e:"💨"},
@@ -114,13 +113,13 @@
     {n:"わいやれすいやほん", e:"🎧"}, {n:"らじお", e:"📻"}, {n:"でんきもうふ", e:"🛏️"}, {n:"こたつ", e:"🪵"}, {n:"でんきすとーぶ", e:"🔥"},
     {n:"かしつき", e:"💧"}, {n:"じょしつき", e:"🌬️"}, {n:"みきさー", e:"🍹"}, {n:"わっふるめーかー", e:"🧇"}, {n:"ぽっぷこーんましん", e:"🍿"},
     {n:"かきごおりき", e:"🍧"}, {n:"でんきあつりょくなべ", e:"🍲"}, {n:"ほーむべーかりー", e:"🍞"}, {n:"わいんせらー", e:"🍾"}, {n:"すもーくましん", e:"💨"},
-    {n:"しーりんぐらいと", e:"💡"}, {n:"かいちゅうdeんとう", e:"🔦"}, {n:"いるみねーしょん", e:"✨"}, {n:"ですくらいと", e:"💡"}, {n:"そーらーぱねる", e:"☀️"},
+    {n:"しーりんぐらいと", e:"💡"}, {n:"かいちゅうでんとう", e:"🔦"}, {n:"いるみねーしょん", e:"✨"}, {n:"ですくらいと", e:"💡"}, {n:"そーらーぱねる", e:"☀️"},
     {n:"じゅうでんき", e:"🔌"}, {n:"もばいるばってりー", e:"🔋"}, {n:"じどうどあ", e:"🚪"}, {n:"えすかれーたー", e:"🪜"}, {n:"えれべーたー", e:"🛗"},
     {n:"じどうかいさつき", e:"🎫"}, {n:"れいぞうとらっく", e:"🚚"}, {n:"でんきじどうしゃ", e:"🚗"}, {n:"はいぶりっどかー", e:"🚘"}, {n:"でんきばイク", e:"🏍️"},
-    {n:"denきじてんしゃ", e:"🚲"}, {n:"どろーん", e:"🛸"}, {n:"らじこんかー", e:"🏎️"}, {n:"でんきぷられーる", e:"🚂"}, {n:"がちゃがちゃましん", e:"🪙"},
+    {n:"でんきじてんしゃ", e:"🚲"}, {n:"どろーん", e:"🛸"}, {n:"らじこんかー", e:"🏎️"}, {n:"でんきぷられーる", e:"🚂"}, {n:"がちゃがちゃましん", e:"🪙"},
     {n:"すまーときー", e:"🔑"}, {n:"じどうきゅうゆき", e:"⛽"}, {n:"でんきどりる", e:"🔧"}, {n:"でんきはんまー", e:"🔨"}, {n:"でんきちぇーんそー", e:"🪓"},
     {n:"はんだごて", e:"🔥"}, {n:"でんきようせつき", e:"⚡"}, {n:"3Dぷりんたー", e:"🖨️"}, {n:"れーざーかったー", e:"⚡"}, {n:"ぼうはんかめら", e:"📷"},
-    {n:"てんもんぼうえんきょう", e:"🔭"}, {n:"でんぱあんてな", e:"📡"}, {n:"すまーとめーたー", e:"⏱️"}, {n:"でんきばいおりん", e:"🎻"}, {n:"えレきぎたー", e:"🎸"},
+    {n:"てんもんぼうえんきょう", e:"🔭"}, {n:"でんぱあんてな", e:"📡"}, {n:"すまーとめーたー", e:"⏱️"}, {n:"でんきばいおりん", e:"🎻"}, {n:"えれきぎたー", e:"🎸"},
     {n:"でんしぴあの", e:"🎹"}, {n:"でんしどらむ", e:"🥁"}, {n:"しんせさいざー", e:"🎹"}, {n:"DJみきさー", e:"🎛️"}, {n:"うーはーすぴーかー", e:"🔊"},
     {n:"めがほん", e:"📢"}, {n:"ぼいすちぇんじゃー", e:"🎙️"}, {n:"からおけましん", e:"🎤"}, {n:"すろっとましん", e:"🎰"}, {n:"くれーんげーむ", e:"🕹️"},
     {n:"どあほん", e:"🔔"}, {n:"おんすいせんじょうべんざ", e:"🚽"}, {n:"でんきおんすいき", e:"♨️"}, {n:"IHくっきんぐひーたー", e:"🍳"}, {n:"ふーどぷろせっさー", e:"🧄"},
@@ -142,12 +141,12 @@
     {n:"じどうきゅうじき", e:"🍖"}, {n:"じどうきゅうすいき", e:"💧"}, {n:"でんききっくぼーど", e:"🛴"}, {n:"しにあかー", e:"🚗"}, {n:"でんきくるまいす", e:"💺"},
     {n:"せぐうえい", e:"🛴"}, {n:"ほばーぼーど", e:"🛹"}, {n:"かんでんちじゅうでんき", e:"🔋"}, {n:"ぽーたぶるでんげん", e:"🔋"}, {n:"とうこうき", e:"💡"},
     {n:"でんきえあぽんぷ", e:"💨"}, {n:"どらいぶれこーだー", e:"📷"}, {n:"かーなび", e:"🗺️"}, {n:"しゃさいれいぞうこ", e:"🧊"}, {n:"ちょうおんぱかしつき", e:"💧"},
-    {n:"あろまでぃふゅーざー", e:"🍃"}, {n:"すまーとちぇあ", e:"💺"}, {n:"でんどうのこぎり", e:"🪓"}, {n:"たいようこうぱねる", e:"☀️"}, {n:"でんきなべ", e:"🍲"},
-    {n:"すまーとりんぐ", e:"💍"}, {n:"わいやれすじゅうでんき", e:"🔌"}, {n:"でんどうねじまわし", e:"🔧"}, {n:"でんしじしょ", e:"📕"}, {n:"たいじゅうけい", e:"⚖️"},
-    {n:"でんしこくばん", e:"📋"}, {n:"でんどうしゃったー", e:"🚪"}, {n:"でんどうるーばー", e:"🪟"}, {n:"じどうかんきせん", e:"💨"}, {n:"でんどうぶらいんど", e:"🪟"},
-    {n:"すまーとろっく", e:"🔑"}, {n:"じどうみずやりき", e:"🚿"}, {n:"でんきさく", e:"⚡"}, {n:"でんどうぽんぷ", e:"💨"}, {n:"でんきおんしつ", e:"🏠"},
-    {n:"じどうそーたー", e:"⚙️"}, {n:"でんきろ", e:"🔥"}, {n:"れーざーすきゃなー", e:"🔍"}, {n:"でんどうりふたー", e:"🏗️"}, {n:"じどうこんべあ", e:"⛓️"},
-    {n:"でんしはかり", e:"⚖️"}, {n:"でじたるのぎす", e:"📏"}, {n:"でんどうぐらいんだー", e:"🔧"}, {n:"でんどうぽりっしゃー", e:"🔧"}, {n:"すまーとふぁん", e:"💨"}
+    {n:"あろまでぃふゅーざー", e:"🍃"}, {n:"すまーとちぇあ", e:"💺"}, {n:"でんどうのこぎり", e:"🪓"}, {n:"たいようこうぱねる", e:"☀️"}, {n:"でんきなべ", e:"🍲"}, {n:"すまーとりんぐ", e:"💍"}, 
+    {n:"わいやれすじゅうでんき", e:"🔌"}, {n:"でんどうねじまわし", e:"🔧"}, {n:"でんしじしょ", e:"📕"}, {n:"たいじゅうけい", e:"⚖️"}, {n:"でんしこくばん", e:"📋"}, 
+    {n:"でんどうしゃったー", e:"🚪"}, {n:"でんどうるーばー", e:"🪟"}, {n:"じどうかんきせん", e:"💨"}, {n:"でんどうぶらいんど", e:"🪟"}, {n:"すまーとろっく", e:"🔑"}, 
+    {n:"じどうみずやりき", e:"🚿"}, {n:"でんきさく", e:"⚡"}, {n:"でんどうぽんぷ", e:"💨"}, {n:"でんきおんしつ", e:"🏠"}, {n:"じどうそーたー", e:"⚙️"}, 
+    {n:"でんきろ", e:"🔥"}, {n:"れーざーすきゃなー", e:"🔍"}, {n:"でんどうりふたー", e:"🏗️"}, {n:"じどうこんべあ", e:"⛓️"}, {n:"でんしはかり", e:"⚖️"}, 
+    {n:"でじたるのぎす", e:"📏"}, {n:"でんどうぐらいんだー", e:"🔧"}, {n:"でんどうぽりっしゃー", e:"🔧"}, {n:"すまーとふぁん", e:"💨"}
   ];
 
   let currentMode = 'add_seq';
@@ -165,7 +164,6 @@
     currentMode = mode;
     document.getElementById('top-screen').style.display = 'none';
     document.getElementById('game-screen').style.display = 'block';
-    
     if (mode === 'add_seq') {
       currentNum1 = parseInt(localStorage.getItem('add_num1')) || 1;
       currentNum2 = parseInt(localStorage.getItem('add_num2')) || 1;
@@ -195,10 +193,8 @@
   function showZukan() {
     document.getElementById('top-screen').style.display = 'none';
     document.getElementById('zukan-screen').style.display = 'block';
-
     let unlocked = JSON.parse(localStorage.getItem('unlocked_kaden_math') || '[]');
     document.getElementById('zukan-count').innerText = unlocked.length;
-
     let gridHtml = '';
     for(let i=0; i<200; i++) {
       if (unlocked.includes(i)) {
@@ -234,7 +230,6 @@
     isAnswered = false;
     let questionText = "";
     let speechText = "";
-    
     if (currentMode.includes('add')) {
       document.getElementById('g1').innerHTML = "👇 さいしょは...<br>" + getFingerGraphic(currentNum1);
       document.getElementById('g2').innerHTML = "👇 つぎに...<br>" + getFingerGraphic(currentNum2);
@@ -246,7 +241,6 @@
       questionText = "のこりは いくつに なるかな？";
       speechText = `つぎのもんだい。さいしょは、${currentNum1}。そこから、${currentNum2} ひくと。のこりは、いくつかな？`;
     }
-    
     document.getElementById('q-text').innerText = questionText;
     document.getElementById('answer').value = "";
     document.getElementById('result').innerHTML = "";
@@ -261,24 +255,15 @@
       if (currentNum1 > 9) { currentNum1 = 1; currentNum2 = 1; } 
       localStorage.setItem('add_num1', currentNum1);
       localStorage.setItem('add_num2', currentNum2);
-    } 
-    else if (currentMode === 'sub_seq') {
+    } else if (currentMode === 'sub_seq') {
       currentNum1++; 
-      if (currentNum1 > currentNum2 + 9) { 
-        currentNum2++;
-        currentNum1 = currentNum2 + 1;
-      }
-      if (currentNum2 > 10) { 
-        currentNum2 = 1;
-        currentNum1 = 2;
-      }
+      if (currentNum1 > currentNum2 + 9) { currentNum2++; currentNum1 = currentNum2 + 1; }
+      if (currentNum2 > 10) { currentNum2 = 1; currentNum1 = 2; }
       localStorage.setItem('sub_num1', currentNum1);
       localStorage.setItem('sub_num2', currentNum2);
-    } 
-    else if (currentMode === 'add_rand') {
+    } else if (currentMode === 'add_rand') {
       setRandomAdd();
-    } 
-    else if (currentMode === 'sub_rand') {
+    } else if (currentMode === 'sub_rand') {
       setRandomSub();
     }
     setupQuestion();
@@ -288,13 +273,10 @@
     if (isAnswered) return;
     let val = voiceInput || document.getElementById('answer').value;
     if (!val) return;
-
     const correctAnswer = currentMode.includes('add') ? currentNum1 + currentNum2 : currentNum1 - currentNum2;
     let parsedVal = parseInt(val);
-    
     const textAnswers = ['ぜろ','いち','に','さん','し','ご','ろく','なな','はち','きゅう','じゅう','じゅういち','じゅうに','じゅうさん','じゅうよん','じゅうご','じゅうろく','じゅうなな','じゅうはち','じゅうきゅう','にじゅう'];
     const kanjiAnswers = ['〇','一','二','三','四','五','六','七','八','九','十','十一','十二','十三','十四','十五','十六','十七','十八','十九','二十'];
-    
     if (isNaN(parsedVal)) {
       if (textAnswers.includes(val)) parsedVal = textAnswers.indexOf(val);
       if (kanjiAnswers.includes(val)) parsedVal = kanjiAnswers.indexOf(val);
@@ -302,56 +284,44 @@
       if (val === 'しち') parsedVal = 7;
       if (val === 'じゅうしち') parsedVal = 17;
     }
-
     let resultDiv = document.getElementById('result');
     if (parsedVal === correctAnswer) {
       isAnswered = true;
       resultDiv.style.color = "#ff1493";
-      
       let unlocked = JSON.parse(localStorage.getItem('unlocked_kaden_math') || '[]');
       if (unlocked.length < 200) {
         let available = [];
         for(let i=0; i<200; i++) { if(!unlocked.includes(i)) available.push(i); }
         let getIdx = available[Math.floor(Math.random() * available.length)];
-        
         unlocked.push(getIdx);
         localStorage.setItem('unlocked_kaden_math', JSON.stringify(unlocked));
-
-        // ★修正：アニメーション（monster-anim）を適用し、読み上げを最後に「ゲットだぜ！」で締めるようにしました
         resultDiv.innerHTML = `🌸 大せいかい！ 🌸<br>
           <div style="font-size:16px; margin-top:10px; background:#fff3cd; padding:15px; border-radius:15px; border:3px solid #ffc107;">
             <div class="monster-anim" style="font-size:70px; display:inline-block;">${kadenList[getIdx].e}</div><br>
             <strong style="font-size:22px;color:#d35400;">${kadenList[getIdx].n}</strong><br>
             ✨ ゲットだぜ！ ✨
           </div>`;
-        
-        // ★修正：読み上げを家電の名前＋ゲットだぜ！で完結させる（途中で切れないように工夫）
         speak(`${kadenList[getIdx].n}、ゲットだぜ！`);
       } else {
         resultDiv.innerHTML = '🌸 大せいかい！ 🌸<br><span style="font-size:16px;">(か電ずかんコンプリート！)</span>';
         speak("だいせいかい！ずかんコンプリートだ！");
       }
-      
-      // ★修正：3秒（3000ms）待つことで、アニメーションをしっかり見せてから次へ
       setTimeout(advanceToNextQuestion, 6000); 
     } else {
       resultDiv.innerHTML = "❌ もういっかい！";
       resultDiv.style.color = "#d32f2f";
       speak("もういっかい、かぞえてみよう！");
     }
+  }
 
   function startMic() {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (!SpeechRecognition) {
-      alert("お使いの端末はマイク認識に対応していません💦"); return;
-    }
+    if (!SpeechRecognition) { alert("お使いの端末はマイク認識に対応していません💦"); return; }
     const recognition = new SpeechRecognition();
     recognition.lang = 'ja-JP';
     recognition.start();
-
     document.getElementById('result').innerHTML = "🎤 きいてるよぉ...";
     document.getElementById('result').style.color = "#3498db";
-
     recognition.onresult = function(event) {
       const spokenText = event.results[0][0].transcript;
       document.getElementById('answer').value = spokenText;
@@ -374,19 +344,11 @@
 
   function resetGame() {
     if (confirm("ほんとうに さいしょから やりなおす？")) {
-      if (currentMode === 'add_seq') {
-        currentNum1 = 1; currentNum2 = 1;
-        localStorage.setItem('add_num1', 1);
-        localStorage.setItem('add_num2', 1);
-      } else if (currentMode === 'sub_seq') {
-        currentNum1 = 2; currentNum2 = 1;
-        localStorage.setItem('sub_num1', 2);
-        localStorage.setItem('sub_num2', 1);
-      }
+      if (currentMode === 'add_seq') { currentNum1 = 1; currentNum2 = 1; localStorage.setItem('add_num1', 1); localStorage.setItem('add_num2', 1); } 
+      else if (currentMode === 'sub_seq') { currentNum1 = 2; currentNum2 = 1; localStorage.setItem('sub_num1', 2); localStorage.setItem('sub_num2', 1); }
       setupQuestion();
     }
   }
 </script>
-
 </body>
 </html>
