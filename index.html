@@ -22,8 +22,8 @@
 
     .quiz-box { background: #fffcf0; padding: 15px; border-radius: 18px; margin-bottom: 20px; border: 3px dashed #ffcb74; }
     .graphic { font-size: 30px; margin: 8px 0; font-weight: bold; line-height: 1.2; word-wrap: break-word; }
-    input[type="number"] { font-size: 40px; width: 110px; text-align: center; padding: 8px; border: 3px solid #b2bec3; border-radius: 16px; background-color: #fafafa; margin-bottom: 10px; }
-    button.action-btn { font-size: 20px; padding: 14px 28px; margin: 8px; border-radius: 50px; border: none; font-weight: bold; cursor: pointer; box-shadow: 0 5px 10px rgba(0,0,0,0.1); color: white; }
+    input[type="text"] { font-size: 40px; width: 150px; text-align: center; padding: 8px; border: 3px solid #b2bec3; border-radius: 16px; background-color: #fafafa; margin-bottom: 10px; }
+    button.action-btn { font-size: 20px; padding: 14px 28px; margin: 8px; border-radius: 50px; border: none; font-weight: bold; cursor: pointer; box-shadow: 0 5px 10px rgba(0,0,0,0.1); color: white; transition: background-color 0.2s; }
     .btn-type { background-color: #2ecc71; }
     .btn-mic { background-color: #3498db; }
     .btn-reset { background-color: #ffeaa7; color: #d35400; font-size: 13px; padding: 8px 16px; margin-top: 15px; box-shadow: none; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; }
@@ -82,9 +82,9 @@
   </div>
 
   <div class="input-area" id="interactive-zone">
-    <input type="number" id="answer" pattern="[0-9]*" inputmode="numeric" placeholder="?"><br>
+    <input type="text" id="answer" pattern="[0-9]*" inputmode="numeric" placeholder="?"><br>
     <button class="action-btn btn-type" onclick="checkAnswer()">👆 こたえる</button>
-    <button class="action-btn btn-mic" onclick="startMic()">🎤 声でこたえる</button>
+    <button class="action-btn btn-mic" id="mic-btn" onclick="startMic()">🎤 声でこたえる</button>
   </div>
 
   <div id="result"></div>
@@ -103,6 +103,7 @@
 </div>
 
 <script>
+  // 200種類のか電・ガジェット・機械データリスト
   const kadenList = [
     {n:"るーむえあこん", e:"❄️"}, {n:"えきしょうてれび", e:"📺"}, {n:"どらむしきせんたくき", e:"🌀"}, {n:"れいぞうこ", e:"🧊"}, {n:"でんじれんじ", e:"⚡"},
     {n:"すいはんき", e:"🍚"}, {n:"そうじき", e:"🧹"}, {n:"くうきせいじょうき", e:"🍃"}, {n:"せんぷうき", e:"💨"}, {n:"どらいやー", e:"💨"},
@@ -164,6 +165,7 @@
     currentMode = mode;
     document.getElementById('top-screen').style.display = 'none';
     document.getElementById('game-screen').style.display = 'block';
+    
     if (mode === 'add_seq') {
       currentNum1 = parseInt(localStorage.getItem('add_num1')) || 1;
       currentNum2 = parseInt(localStorage.getItem('add_num2')) || 1;
@@ -269,21 +271,49 @@
     setupQuestion();
   }
 
+  // ★ 音声入力された文字列を賢く数字に変換する機能
+  function normalizeAnswer(str) {
+    if (!str) return NaN;
+    
+    // 1. 全角数字（１０など）を半角数字（10）に変換
+    str = str.replace(/[０-９]/g, function(s) {
+      return String.fromCharCode(s.charCodeAt(0) - 0xFEE0);
+    });
+    
+    // 2. 余計な言葉を消す
+    str = str.replace(/\s+/g, ""); // 空白を消す
+    str = str.replace(/です/g, ""); // 「〜です」を消す
+    str = str.replace(/だよ/g, "");
+
+    // 3. ひらがなや漢字の数字対応
+    const textAnswers = ['ぜろ','いち','に','さん','し','ご','ろく','なな','はち','きゅう','じゅう','じゅういち','じゅうに','じゅうさん','じゅうよん','じゅうご','じゅうろく','じゅうなな','じゅうはち','じゅうきゅう','にじゅう'];
+    const kanjiAnswers = ['〇','一','二','三','四','五','六','七','八','九','十','十一','十二','十三','十四','十五','十六','十七','十八','十九','二十'];
+    
+    if (textAnswers.includes(str)) return textAnswers.indexOf(str);
+    if (kanjiAnswers.includes(str)) return kanjiAnswers.indexOf(str);
+    if (str === 'じゅうし') return 14;
+    if (str === 'しち') return 7;
+    if (str === 'じゅうしち') return 17;
+
+    // 4. 上記でダメなら、文字の中から「数字だけ」を取り出して数値にする
+    let numStr = str.replace(/[^0-9]/g, '');
+    if (numStr.length > 0) {
+      return parseInt(numStr, 10);
+    }
+    
+    return NaN;
+  }
+
   function checkAnswer(voiceInput) {
     if (isAnswered) return;
     let val = voiceInput || document.getElementById('answer').value;
     if (!val) return;
+    
     const correctAnswer = currentMode.includes('add') ? currentNum1 + currentNum2 : currentNum1 - currentNum2;
-    let parsedVal = parseInt(val);
-    const textAnswers = ['ぜろ','いち','に','さん','し','ご','ろく','なな','はち','きゅう','じゅう','じゅういち','じゅうに','じゅうさん','じゅうよん','じゅうご','じゅうろく','じゅうなな','じゅうはち','じゅうきゅう','にじゅう'];
-    const kanjiAnswers = ['〇','一','二','三','四','五','六','七','八','九','十','十一','十二','十三','十四','十五','十六','十七','十八','十九','二十'];
-    if (isNaN(parsedVal)) {
-      if (textAnswers.includes(val)) parsedVal = textAnswers.indexOf(val);
-      if (kanjiAnswers.includes(val)) parsedVal = kanjiAnswers.indexOf(val);
-      if (val === 'じゅうし') parsedVal = 14;
-      if (val === 'しち') parsedVal = 7;
-      if (val === 'じゅうしち') parsedVal = 17;
-    }
+    
+    // ★賢い変換機能を使う
+    let parsedVal = normalizeAnswer(val);
+    
     let resultDiv = document.getElementById('result');
     if (parsedVal === correctAnswer) {
       isAnswered = true;
@@ -319,17 +349,32 @@
     if (!SpeechRecognition) { alert("お使いの端末はマイク認識に対応していません💦"); return; }
     const recognition = new SpeechRecognition();
     recognition.lang = 'ja-JP';
-    recognition.start();
-    document.getElementById('result').innerHTML = "🎤 きいてるよぉ...";
+    
+    // ★マイクボタンの見た目を変えて、ききとり中であることを分かりやすくする
+    let micBtn = document.getElementById('mic-btn');
+    micBtn.innerHTML = "🎤 ききとり中...";
+    micBtn.style.backgroundColor = "#e74c3c"; // 赤色に変更
+
+    document.getElementById('result').innerHTML = "🎤 しゃべってね！";
     document.getElementById('result').style.color = "#3498db";
+    
+    recognition.start();
+
     recognition.onresult = function(event) {
       const spokenText = event.results[0][0].transcript;
       document.getElementById('answer').value = spokenText;
       checkAnswer(spokenText);
     };
+    
     recognition.onerror = function() {
-      document.getElementById('result').innerHTML = "もういちど喋ってみてね！";
+      document.getElementById('result').innerHTML = "うまくききとれなかったよ！";
       document.getElementById('result').style.color = "#7f8c8d";
+    };
+
+    // ★聞き取りが終わったら（成功・失敗にかかわらず）ボタンの色を元に戻す
+    recognition.onend = function() {
+      micBtn.innerHTML = "🎤 声でこたえる";
+      micBtn.style.backgroundColor = "#3498db"; // 元の青色に戻す
     };
   }
 
