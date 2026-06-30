@@ -23,11 +23,11 @@
     .quiz-box { background: #fffcf0; padding: 15px; border-radius: 18px; margin-bottom: 20px; border: 3px dashed #ffcb74; }
     .graphic { font-size: 30px; margin: 8px 0; font-weight: bold; line-height: 1.2; word-wrap: break-word; }
     input[type="text"] { font-size: 40px; width: 150px; text-align: center; padding: 8px; border: 3px solid #b2bec3; border-radius: 16px; background-color: #fafafa; margin-bottom: 10px; }
-    button.action-btn { font-size: 20px; padding: 14px 28px; margin: 8px; border-radius: 50px; border: none; font-weight: bold; cursor: pointer; box-shadow: 0 5px 10px rgba(0,0,0,0.1); color: white; transition: background-color 0.2s; }
+    button.action-btn { font-size: 18px; padding: 14px 20px; margin: 6px; border-radius: 50px; border: none; font-weight: bold; cursor: pointer; box-shadow: 0 5px 10px rgba(0,0,0,0.1); color: white; transition: background-color 0.2s; }
     .btn-type { background-color: #2ecc71; }
     .btn-mic { background-color: #3498db; }
     .btn-reset { background-color: #ffeaa7; color: #d35400; font-size: 13px; padding: 8px 16px; margin-top: 15px; box-shadow: none; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; }
-    #result { font-size: 30px; font-weight: bold; margin: 15px 0; min-height: 40px; }
+    #result { font-size: 24px; font-weight: bold; margin: 15px 0; min-height: 40px; }
 
     .zukan-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 15px; max-height: 450px; overflow-y: auto; padding: 10px; background: #fffcf0; border-radius: 10px; border: 3px dashed #ffcb74; }
     .zukan-item { background: white; border-radius: 8px; padding: 8px 4px; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.1); display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 65px; }
@@ -50,25 +50,13 @@
   <h2>🚂 さんすうアドベンチャー </h2>
   <div class="subtitle">あそぶモードをえらんでね！</div>
   
-  <button class="btn-mode mode-add" onclick="startGame('add_seq')">
-    ➕ たしざん（じゅんばん）<br><span class="sub-text">1+1 から 9+10 まで</span>
-  </button>
-  <button class="btn-mode mode-add-rand" onclick="startGame('add_rand')">
-    🎲 たしざん（ランダム）<br><span class="sub-text">毎回バラバラにでるよ</span>
-  </button>
-  
+  <button class="btn-mode mode-add" onclick="startGame('add_seq')">➕ たしざん（じゅんばん）<br><span class="sub-text">1+1 から 9+10 まで</span></button>
+  <button class="btn-mode mode-add-rand" onclick="startGame('add_rand')">🎲 たしざん（ランダム）<br><span class="sub-text">毎回バラバラにでるよ</span></button>
   <div style="margin: 20px 0; border-top: 2px dashed #ccc;"></div>
+  <button class="btn-mode mode-sub" onclick="startGame('sub_seq')">➖ ひきざん（じゅんばん）<br><span class="sub-text">ひく1 から ひく10 まで</span></button>
+  <button class="btn-mode mode-sub-rand" onclick="startGame('sub_rand')">🎲 ひきざん（ランダム）<br><span class="sub-text">毎回バラバラにでるよ</span></button>
 
-  <button class="btn-mode mode-sub" onclick="startGame('sub_seq')">
-    ➖ ひきざん（じゅんばん）<br><span class="sub-text">ひく1 から ひく10 まで</span>
-  </button>
-  <button class="btn-mode mode-sub-rand" onclick="startGame('sub_rand')">
-    🎲 ひきざん（ランダム）<br><span class="sub-text">毎回バラバラにでるよ</span>
-  </button>
-
-  <button class="btn-mode mode-zukan" onclick="showZukan()">
-    📖 か電ずかんを見る
-  </button>
+  <button class="btn-mode mode-zukan" onclick="showZukan()">📖 か電ずかんを見る</button>
 </div>
 
 <div class="container" id="game-screen" style="display: none;">
@@ -84,7 +72,7 @@
   <div class="input-area" id="interactive-zone">
     <input type="text" id="answer" pattern="[0-9]*" inputmode="numeric" placeholder="?"><br>
     <button class="action-btn btn-type" onclick="checkAnswer()">👆 こたえる</button>
-    <button class="action-btn btn-mic" id="mic-btn" onclick="startMic()">🎤 声でこたえる</button>
+    <button class="action-btn btn-mic" id="btn-mic-auto" onclick="toggleAutoMic()">▶️ ずっと声でこたえる</button>
   </div>
 
   <div id="result"></div>
@@ -96,69 +84,28 @@
 <div class="container" id="zukan-screen" style="display: none;">
   <h2>📖 か電ずかん</h2>
   <div class="count-text">あつめた数: <span id="zukan-count">0</span> / 200</div>
-  
   <div class="zukan-grid" id="zukan-grid"></div>
-
   <button class="btn-reset" style="font-size: 16px; padding: 12px 24px; margin-top: 20px;" onclick="goBackToTop()">🏠 トップにもどる</button>
 </div>
 
 <script>
-  // 200種類のか電・ガジェット・機械データリスト
+  // 200種類の家電リスト（コードが途切れないよう圧縮しています）
   const kadenList = [
-    {n:"るーむえあこん", e:"❄️"}, {n:"えきしょうてれび", e:"📺"}, {n:"どらむしきせんたくき", e:"🌀"}, {n:"れいぞうこ", e:"🧊"}, {n:"でんじれんじ", e:"⚡"},
-    {n:"すいはんき", e:"🍚"}, {n:"そうじき", e:"🧹"}, {n:"くうきせいじょうき", e:"🍃"}, {n:"せんぷうき", e:"💨"}, {n:"どらいやー", e:"💨"},
-    {n:"のーとぱそこん", e:"💻"}, {n:"すまーとほん", e:"📱"}, {n:"たぶれっと", e:"📲"}, {n:"すまーとうぉっち", e:"⌚"}, {n:"げーむき", e:"🎮"},
-    {n:"おーぶんとおすたー", e:"🍞"}, {n:"でんきけとる", e:"🫖"}, {n:"こーひーめーかー", e:"☕"}, {n:"しょっきあらいき", e:"🍽️"}, {n:"ほっとぷれーと", e:"🍳"},
-    {n:"じどうはんばいき", e:"🥤"}, {n:"れいとうしょーけーす", e:"🥶"}, {n:"すまーとすぴーかー", e:"🔊"}, {n:"ろぼっとそうじき", e:"🤖"}, {n:"でんきはぶらし", e:"🪥"},
-    {n:"びでおかめら", e:"📹"}, {n:"でじたるかめら", e:"📷"}, {n:"ぷろじぇくたー", e:"📽️"}, {n:"ぷりんたー", e:"🖨️"}, {n:"へっどほん", e:"🎧"},
-    {n:"わいやれすいやほん", e:"🎧"}, {n:"らじお", e:"📻"}, {n:"でんきもうふ", e:"🛏️"}, {n:"こたつ", e:"🪵"}, {n:"でんきすとーぶ", e:"🔥"},
-    {n:"かしつき", e:"💧"}, {n:"じょしつき", e:"🌬️"}, {n:"みきさー", e:"🍹"}, {n:"わっふるめーかー", e:"🧇"}, {n:"ぽっぷこーんましん", e:"🍿"},
-    {n:"かきごおりき", e:"🍧"}, {n:"でんきあつりょくなべ", e:"🍲"}, {n:"ほーむべーかりー", e:"🍞"}, {n:"わいんせらー", e:"🍾"}, {n:"すもーくましん", e:"💨"},
-    {n:"しーりんぐらいと", e:"💡"}, {n:"かいちゅうでんとう", e:"🔦"}, {n:"いるみねーしょん", e:"✨"}, {n:"ですくらいと", e:"💡"}, {n:"そーらーぱねる", e:"☀️"},
-    {n:"じゅうでんき", e:"🔌"}, {n:"もばいるばってりー", e:"🔋"}, {n:"じどうどあ", e:"🚪"}, {n:"えすかれーたー", e:"🪜"}, {n:"えれべーたー", e:"🛗"},
-    {n:"じどうかいさつき", e:"🎫"}, {n:"れいぞうとらっく", e:"🚚"}, {n:"でんきじどうしゃ", e:"🚗"}, {n:"はいぶりっどかー", e:"🚘"}, {n:"でんきばイク", e:"🏍️"},
-    {n:"でんきじてんしゃ", e:"🚲"}, {n:"どろーん", e:"🛸"}, {n:"らじこんかー", e:"🏎️"}, {n:"でんきぷられーる", e:"🚂"}, {n:"がちゃがちゃましん", e:"🪙"},
-    {n:"すまーときー", e:"🔑"}, {n:"じどうきゅうゆき", e:"⛽"}, {n:"でんきどりる", e:"🔧"}, {n:"でんきはんまー", e:"🔨"}, {n:"でんきちぇーんそー", e:"🪓"},
-    {n:"はんだごて", e:"🔥"}, {n:"でんきようせつき", e:"⚡"}, {n:"3Dぷりんたー", e:"🖨️"}, {n:"れーざーかったー", e:"⚡"}, {n:"ぼうはんかめら", e:"📷"},
-    {n:"てんもんぼうえんきょう", e:"🔭"}, {n:"でんぱあんてな", e:"📡"}, {n:"すまーとめーたー", e:"⏱️"}, {n:"でんきばいおりん", e:"🎻"}, {n:"えれきぎたー", e:"🎸"},
-    {n:"でんしぴあの", e:"🎹"}, {n:"でんしどらむ", e:"🥁"}, {n:"しんせさいざー", e:"🎹"}, {n:"DJみきさー", e:"🎛️"}, {n:"うーはーすぴーかー", e:"🔊"},
-    {n:"めがほん", e:"📢"}, {n:"ぼいすちぇんじゃー", e:"🎙️"}, {n:"からおけましん", e:"🎤"}, {n:"すろっとましん", e:"🎰"}, {n:"くれーんげーむ", e:"🕹️"},
-    {n:"どあほん", e:"🔔"}, {n:"おんすいせんじょうべんざ", e:"🚽"}, {n:"でんきおんすいき", e:"♨️"}, {n:"IHくっきんぐひーたー", e:"🍳"}, {n:"ふーどぷろせっさー", e:"🧄"},
-    {n:"なまごみしょりき", e:"🗑️"}, {n:"ふとんかんそうき", e:"🛏️"}, {n:"ずぼんぷれっさー", e:"👖"}, {n:"あしおんき", e:"🧦"}, {n:"でんきあんか", e:"🔥"},
-    {n:"しゅれっだー", e:"📄"}, {n:"たいむれこーだー", e:"⏱️"}, {n:"でんきえんぴつけずり", e:"✏️"}, {n:"らみねーたー", e:"📄"}, {n:"でんたく", e:"🧮"},
-    {n:"ばーこーどりーだー", e:"🔍"}, {n:"れじすたー", e:"💰"}, {n:"こぴーき", e:"🖨️"}, {n:"すきゃなー", e:"📄"}, {n:"3Dすきゃなー", e:"🔍"},
-    {n:"でんきしぇーばー", e:"🪒"}, {n:"はなげかったー", e:"✂️"}, {n:"びがんき", e:"✨"}, {n:"ひかりびようき", e:"⚡"}, {n:"まっさーじちぇあ", e:"💺"},
-    {n:"ふっとまっさーじゃー", e:"🦶"}, {n:"ていしゅうはちりょうき", e:"⚡"}, {n:"でんきべっど", e:"🛏️"}, {n:"らいとつきみらー", e:"🪞"}, {n:"へああいろん", e:"💇"},
-    {n:"でんきぽっと", e:"🫖"}, {n:"びーるさーばー", e:"🍺"}, {n:"うぉーたーさーばー", e:"💧"}, {n:"ちょこれーとふぁうんてん", e:"🍫"}, {n:"わたあめましん", e:"☁️"},
-    {n:"くれーぷめーかー", e:"🍳"}, {n:"あいすくりーむめーかー", e:"🍨"}, {n:"よーぐるとめーかー", e:"🥛"}, {n:"でんきふらいやー", e:"🍤"}, {n:"すちーむくっかー", e:"💨"},
-    {n:"ほっとさんどめーかー", e:"🥪"}, {n:"ふぃっしゅろーすたー", e:"🐟"}, {n:"でんきぐりるなべ", e:"🍲"}, {n:"ほおんじゃー", e:"🍚"}, {n:"れいおんこ", e:"📦"},
-    {n:"そーだましん", e:"🥤"}, {n:"すろーじゅーさー", e:"🍹"}, {n:"はんどみきさー", e:"🥚"}, {n:"じどうちょうりなべ", e:"🍲"}, {n:"ふっとばす", e:"🦶"},
-    {n:"でんきみしん", e:"🧵"}, {n:"けだまとりき", e:"👕"}, {n:"くつかんそうき", e:"👟"}, {n:"ちょうおんぱせんじょうき", e:"👓"}, {n:"でんきどらいばー", e:"🔧"},
-    {n:"でんきさんだー", e:"🔧"}, {n:"でんきじぐそー", e:"🪓"}, {n:"こうあつせんじょうき", e:"🚿"}, {n:"しばかりき", e:"🌱"}, {n:"ぶろわー", e:"💨"},
-    {n:"でんきくさかりき", e:"🌱"}, {n:"おいるひーたー", e:"🔥"}, {n:"ぱねるひーたー", e:"🔥"}, {n:"せらみっくふぁんひーたー", e:"🔥"}, {n:"がすふぁんひーたー", e:"🔥"},
-    {n:"せきゆすとーぶ", e:"🔥"}, {n:"れいふうせん", e:"💨"}, {n:"すぽっとくーらー", e:"❄️"}, {n:"じょしつかんそうき", e:"💨"}, {n:"だつしゅうき", e:"🍃"},
-    {n:"だつしゅうはんがー", e:"👔"}, {n:"あいろん", e:"💨"}, {n:"いるいすちーまー", e:"💨"}, {n:"はんでぃくりーなー", e:"🧹"}, {n:"すてぃっくくりーなー", e:"🧹"},
-    {n:"ふとんくりーなー", e:"🛏️"}, {n:"みずぶきろぼっと", e:"🤖"}, {n:"まどふきろぼっと", e:"🤖"}, {n:"でんどうぱとかー", e:"🚓"}, {n:"せんさーらいと", e:"💡"},
-    {n:"じどうきゅうじき", e:"🍖"}, {n:"じどうきゅうすいき", e:"💧"}, {n:"でんききっくぼーど", e:"🛴"}, {n:"しにあかー", e:"🚗"}, {n:"でんきくるまいす", e:"💺"},
-    {n:"せぐうえい", e:"🛴"}, {n:"ほばーぼーど", e:"🛹"}, {n:"かんでんちじゅうでんき", e:"🔋"}, {n:"ぽーたぶるでんげん", e:"🔋"}, {n:"とうこうき", e:"💡"},
-    {n:"でんきえあぽんぷ", e:"💨"}, {n:"どらいぶれこーだー", e:"📷"}, {n:"かーなび", e:"🗺️"}, {n:"しゃさいれいぞうこ", e:"🧊"}, {n:"ちょうおんぱかしつき", e:"💧"},
-    {n:"あろまでぃふゅーざー", e:"🍃"}, {n:"すまーとちぇあ", e:"💺"}, {n:"でんどうのこぎり", e:"🪓"}, {n:"たいようこうぱねる", e:"☀️"}, {n:"でんきなべ", e:"🍲"}, {n:"すまーとりんぐ", e:"💍"}, 
-    {n:"わいやれすじゅうでんき", e:"🔌"}, {n:"でんどうねじまわし", e:"🔧"}, {n:"でんしじしょ", e:"📕"}, {n:"たいじゅうけい", e:"⚖️"}, {n:"でんしこくばん", e:"📋"}, 
-    {n:"でんどうしゃったー", e:"🚪"}, {n:"でんどうるーばー", e:"🪟"}, {n:"じどうかんきせん", e:"💨"}, {n:"でんどうぶらいんど", e:"🪟"}, {n:"すまーとろっく", e:"🔑"}, 
-    {n:"じどうみずやりき", e:"🚿"}, {n:"でんきさく", e:"⚡"}, {n:"でんどうぽんぷ", e:"💨"}, {n:"でんきおんしつ", e:"🏠"}, {n:"じどうそーたー", e:"⚙️"}, 
-    {n:"でんきろ", e:"🔥"}, {n:"れーざーすきゃなー", e:"🔍"}, {n:"でんどうりふたー", e:"🏗️"}, {n:"じどうこんべあ", e:"⛓️"}, {n:"でんしはかり", e:"⚖️"}, 
-    {n:"でじたるのぎす", e:"📏"}, {n:"でんどうぐらいんだー", e:"🔧"}, {n:"でんどうぽりっしゃー", e:"🔧"}, {n:"すまーとふぁん", e:"💨"}
+    {n:"るーむえあこん",e:"❄️"},{n:"えきしょうてれび",e:"📺"},{n:"どらむしきせんたくき",e:"🌀"},{n:"れいぞうこ",e:"🧊"},{n:"でんじれんじ",e:"⚡"},{n:"すいはんき",e:"🍚"},{n:"そうじき",e:"🧹"},{n:"くうきせいじょうき",e:"🍃"},{n:"せんぷうき",e:"💨"},{n:"どらいやー",e:"💨"},{n:"のーとぱそこん",e:"💻"},{n:"すまーとほん",e:"📱"},{n:"たぶれっと",e:"📲"},{n:"すまーとうぉっち",e:"⌚"},{n:"げーむき",e:"🎮"},{n:"おーぶんとおすたー",e:"🍞"},{n:"でんきけとる",e:"🫖"},{n:"こーひーめーかー",e:"☕"},{n:"しょっきあらいき",e:"🍽️"},{n:"ほっとぷれーと",e:"🍳"},{n:"じどうはんばいき",e:"🥤"},{n:"れいとうしょーけーす",e:"🥶"},{n:"すまーとすぴーかー",e:"🔊"},{n:"ろぼっとそうじき",e:"🤖"},{n:"でんきはぶらし",e:"🪥"},{n:"びでおかめら",e:"📹"},{n:"でじたるかめら",e:"📷"},{n:"ぷろじぇくたー",e:"📽️"},{n:"ぷりんたー",e:"🖨️"},{n:"へっどほん",e:"🎧"},{n:"わいやれすいやほん",e:"🎧"},{n:"らじお",e:"📻"},{n:"でんきもうふ",e:"🛏️"},{n:"こたつ",e:"🪵"},{n:"でんきすとーぶ",e:"🔥"},{n:"かしつき",e:"💧"},{n:"じょしつき",e:"🌬️"},{n:"みきさー",e:"🍹"},{n:"わっふるめーかー",e:"🧇"},{n:"ぽっぷこーんましん",e:"🍿"},{n:"かきごおりき",e:"🍧"},{n:"でんきあつりょくなべ",e:"🍲"},{n:"ほーむべーかりー",e:"🍞"},{n:"わいんせらー",e:"🍾"},{n:"すもーくましん",e:"💨"},{n:"しーりんぐらいと",e:"💡"},{n:"かいちゅうでんとう",e:"🔦"},{n:"いるみねーしょん",e:"✨"},{n:"ですくらいと",e:"💡"},{n:"そーらーぱねる",e:"☀️"},{n:"じゅうでんき",e:"🔌"},{n:"もばいるばってりー",e:"🔋"},{n:"じどうどあ",e:"🚪"},{n:"えすかれーたー",e:"🪜"},{n:"えれべーたー",e:"🛗"},{n:"じどうかいさつき",e:"🎫"},{n:"れいぞうとらっく",e:"🚚"},{n:"でんきじどうしゃ",e:"🚗"},{n:"はいぶりっどかー",e:"🚘"},{n:"でんきばいく",e:"🏍️"},{n:"でんきじてんしゃ",e:"🚲"},{n:"どろーん",e:"🛸"},{n:"らじこんかー",e:"🏎️"},{n:"でんきぷられーる",e:"🚂"},{n:"がちゃがちゃましん",e:"🪙"},{n:"すまーときー",e:"🔑"},{n:"じどうきゅうゆき",e:"⛽"},{n:"でんきどりる",e:"🔧"},{n:"でんきはんまー",e:"🔨"},{n:"でんきちぇーんそー",e:"🪓"},{n:"はんだごて",e:"🔥"},{n:"でんきようせつき",e:"⚡"},{n:"3Dぷりんたー",e:"🖨️"},{n:"れーざーかったー",e:"⚡"},{n:"ぼうはんかめら",e:"📷"},{n:"てんもんぼうえんきょう",e:"🔭"},{n:"でんぱあんてな",e:"📡"},{n:"すまーとめーたー",e:"⏱️"},{n:"でんきばいおりん",e:"🎻"},{n:"えれきぎたー",e:"🎸"},{n:"でんしぴあの",e:"🎹"},{n:"でんしどらむ",e:"🥁"},{n:"しんせさいざー",e:"🎹"},{n:"DJみきさー",e:"🎛️"},{n:"うーはーすぴーかー",e:"🔊"},{n:"めがほん",e:"📢"},{n:"ぼいすちぇんじゃー",e:"🎙️"},{n:"からおけましん",e:"🎤"},{n:"すろっとましん",e:"🎰"},{n:"くれーんげーむ",e:"🕹️"},{n:"どあほん",e:"🔔"},{n:"おんすいせんじょうべんざ",e:"🚽"},{n:"でんきおんすいき",e:"♨️"},{n:"IHくっきんぐひーたー",e:"🍳"},{n:"ふーどぷろせっさー",e:"🧄"},{n:"なまごみしょりき",e:"🗑️"},{n:"ふとんかんそうき",e:"🛏️"},{n:"ずぼんぷれっさー",e:"👖"},{n:"あしおんき",e:"🧦"},{n:"でんきあんか",e:"🔥"},{n:"しゅれっだー",e:"📄"},{n:"たいむれこーだー",e:"⏱️"},{n:"でんきえんぴつけずり",e:"✏️"},{n:"らみねーたー",e:"📄"},{n:"でんたく",e:"🧮"},{n:"ばーこーどりーだー",e:"🔍"},{n:"れじすたー",e:"💰"},{n:"こぴーき",e:"🖨️"},{n:"すきゃなー",e:"📄"},{n:"3Dすきゃなー",e:"🔍"},{n:"でんきしぇーばー",e:"🪒"},{n:"はなげかったー",e:"✂️"},{n:"びがんき",e:"✨"},{n:"ひかりびようき",e:"⚡"},{n:"まっさーじちぇあ",e:"💺"},{n:"ふっとまっさーじゃー",e:"🦶"},{n:"ていしゅうはちりょうき",e:"⚡"},{n:"でんきべっど",e:"🛏️"},{n:"らいとつきみらー",e:"🪞"},{n:"へああいろん",e:"💇"},{n:"でんきぽっと",e:"🫖"},{n:"びーるさーばー",e:"🍺"},{n:"うぉーたーさーばー",e:"💧"},{n:"ちょこれーとふぁうんてん",e:"🍫"},{n:"わたあめましん",e:"☁️"},{n:"くれーぷめーかー",e:"🍳"},{n:"あいすくりーむめーかー",e:"🍨"},{n:"よーぐるとめーかー",e:"🥛"},{n:"でんきふらいやー",e:"🍤"},{n:"すちーむくっかー",e:"💨"},{n:"ほっとさんどめーかー",e:"🥪"},{n:"ふぃっしゅろーすたー",e:"🐟"},{n:"でんきぐりるなべ",e:"🍲"},{n:"ほおんじゃー",e:"🍚"},{n:"れいおんこ",e:"📦"},{n:"そーだましん",e:"🥤"},{n:"すろーじゅーさー",e:"🍹"},{n:"はんどみきさー",e:"🥚"},{n:"じどうちょうりなべ",e:"🍲"},{n:"ふっとばす",e:"🦶"},{n:"でんきみしん",e:"🧵"},{n:"けだまとりき",e:"👕"},{n:"くつかんそうき",e:"👟"},{n:"ちょうおんぱせんじょうき",e:"👓"},{n:"でんきどらいばー",e:"🔧"},{n:"でんきさんだー",e:"🔧"},{n:"でんきじぐそー",e:"🪓"},{n:"こうあつせんじょうき",e:"🚿"},{n:"しばかりき",e:"🌱"},{n:"ぶろわー",e:"💨"},{n:"でんきくさかりき",e:"🌱"},{n:"おいるひーたー",e:"🔥"},{n:"ぱねるひーたー",e:"🔥"},{n:"せらみっくふぁんひーたー",e:"🔥"},{n:"がすふぁんひーたー",e:"🔥"},{n:"せきゆすとーぶ",e:"🔥"},{n:"れいふうせん",e:"💨"},{n:"すぽっとくーらー",e:"❄️"},{n:"じょしつかんそうき",e:"💨"},{n:"だつしゅうき",e:"🍃"},{n:"だつしゅうはんがー",e:"👔"},{n:"あいろん",e:"💨"},{n:"いるいすちーまー",e:"💨"},{n:"はんでぃくりーなー",e:"🧹"},{n:"すてぃっくくりーなー",e:"🧹"},{n:"ふとんくりーなー",e:"🛏️"},{n:"みずぶきろぼっと",e:"🤖"},{n:"まどふきろぼっと",e:"🤖"},{n:"でんどうぱとかー",e:"🚓"},{n:"せんさーらいと",e:"💡"},{n:"じどうきゅうじき",e:"🍖"},{n:"じどうきゅうすいき",e:"💧"},{n:"でんききっくぼーど",e:"🛴"},{n:"しにあかー",e:"🚗"},{n:"でんきくるまいす",e:"💺"},{n:"せぐうえい",e:"🛴"},{n:"ほばーぼーど",e:"🛹"},{n:"かんでんちじゅうでんき",e:"🔋"},{n:"ぽーたぶるでんげん",e:"🔋"},{n:"とうこうき",e:"💡"},{n:"でんきえあぽんぷ",e:"💨"},{n:"どらいぶれこーだー",e:"📷"},{n:"かーなび",e:"🗺️"},{n:"しゃさいれいぞうこ",e:"🧊"},{n:"ちょうおんぱかしつき",e:"💧"},{n:"あろまでぃふゅーざー",e:"🍃"},{n:"すまーとちぇあ",e:"💺"},{n:"でんどうのこぎり",e:"🪓"},{n:"たいようこうぱねる",e:"☀️"},{n:"でんきなべ",e:"🍲"},{n:"すまーとりんぐ",e:"💍"},{n:"わいやれすじゅうでんき",e:"🔌"},{n:"でんどうねじまわし",e:"🔧"},{n:"でんしじしょ",e:"📕"},{n:"たいじゅうけい",e:"⚖️"},{n:"でんしこくばん",e:"📋"},{n:"でんどうしゃったー",e:"🚪"},{n:"でんどうるーばー",e:"🪟"},{n:"じどうかんきせん",e:"💨"},{n:"でんどうぶらいんど",e:"🪟"},{n:"すまーとろっく",e:"🔑"},{n:"じどうみずやりき",e:"🚿"},{n:"でんきさく",e:"⚡"},{n:"でんどうぽんぷ",e:"💨"},{n:"でんきおんしつ",e:"🏠"},{n:"じどうそーたー",e:"⚙️"},{n:"でんきろ",e:"🔥"},{n:"れーざーすきゃなー",e:"🔍"},{n:"でんどうりふたー",e:"🏗️"},{n:"じどうこんべあ",e:"⛓️"},{n:"でんしはかり",e:"⚖️"},{n:"でじたるのぎす",e:"📏"},{n:"でんどうぐらいんだー",e:"🔧"},{n:"でんどうぽりっしゃー",e:"🔧"},{n:"すまーとふぁん",e:"💨"}
   ];
 
   let currentMode = 'add_seq';
   let currentNum1 = 1;
   let currentNum2 = 1;
   let isAnswered = false;
+  
+  // ★ マイク自動化の新しい変数
+  let isAutoMic = false;
+  let currentRecognition = null;
+  let isSpeaking = false; 
 
   window.onload = function() {
     document.getElementById('top-screen').style.display = 'block';
-    document.getElementById('game-screen').style.display = 'none';
-    document.getElementById('zukan-screen').style.display = 'none';
   };
 
   function startGame(mode) {
@@ -175,17 +122,26 @@
       currentNum2 = parseInt(localStorage.getItem('sub_num2')) || 1;
       if (currentNum1 <= currentNum2) { currentNum1 = 2; currentNum2 = 1; }
       document.getElementById('game-subtitle').innerText = "➖ ひきざん を がんばろう！";
-    } else if (mode === 'add_rand') {
-      setRandomAdd();
-      document.getElementById('game-subtitle').innerText = "🎲 たしざん（ランダム）";
-    } else if (mode === 'sub_rand') {
-      setRandomSub();
-      document.getElementById('game-subtitle').innerText = "🎲 ひきざん（ランダム）";
+    } else if (mode.includes('rand')) {
+      if (mode === 'add_rand') setRandomAdd(); else setRandomSub();
+      document.getElementById('game-subtitle').innerText = mode === 'add_rand' ? "🎲 たしざん（ランダム）" : "🎲 ひきざん（ランダム）";
     }
     setupQuestion();
   }
 
+  // トップや図鑑に戻る時は必ずマイクをストップする
+  function stopMicSafety() {
+    if (currentRecognition) { try { currentRecognition.stop(); } catch(e) {} }
+    isAutoMic = false;
+    let micBtn = document.getElementById('btn-mic-auto');
+    if (micBtn) {
+      micBtn.innerHTML = "▶️ ずっと声でこたえる";
+      micBtn.style.backgroundColor = "#3498db";
+    }
+  }
+
   function goBackToTop() {
+    stopMicSafety();
     document.getElementById('game-screen').style.display = 'none';
     document.getElementById('zukan-screen').style.display = 'none';
     document.getElementById('top-screen').style.display = 'block';
@@ -193,61 +149,50 @@
   }
 
   function showZukan() {
+    stopMicSafety();
     document.getElementById('top-screen').style.display = 'none';
     document.getElementById('zukan-screen').style.display = 'block';
     let unlocked = JSON.parse(localStorage.getItem('unlocked_kaden_math') || '[]');
     document.getElementById('zukan-count').innerText = unlocked.length;
     let gridHtml = '';
     for(let i=0; i<200; i++) {
-      if (unlocked.includes(i)) {
-        gridHtml += `<div class="zukan-item"><span class="zukan-emoji">${kadenList[i].e}</span><span class="zukan-name">${kadenList[i].n}</span></div>`;
-      } else {
-        gridHtml += `<div class="zukan-item locked">❓</div>`;
-      }
+      gridHtml += unlocked.includes(i) ? `<div class="zukan-item"><span class="zukan-emoji">${kadenList[i].e}</span><span class="zukan-name">${kadenList[i].n}</span></div>` : `<div class="zukan-item locked">❓</div>`;
     }
     document.getElementById('zukan-grid').innerHTML = gridHtml;
   }
 
-  function setRandomAdd() {
-    currentNum1 = Math.floor(Math.random() * 9) + 1; 
-    currentNum2 = Math.floor(Math.random() * 10) + 1; 
-  }
-  function setRandomSub() {
-    currentNum2 = Math.floor(Math.random() * 10) + 1; 
-    currentNum1 = currentNum2 + Math.floor(Math.random() * 9) + 1; 
-  }
+  function setRandomAdd() { currentNum1 = Math.floor(Math.random()*9)+1; currentNum2 = Math.floor(Math.random()*10)+1; }
+  function setRandomSub() { currentNum2 = Math.floor(Math.random()*10)+1; currentNum1 = currentNum2 + Math.floor(Math.random()*9)+1; }
 
   function getFingerGraphic(num) {
-    let hands = "";
-    let n = num;
+    let hands = "", n = num;
     while(n >= 5) { hands += "🖐️"; n -= 5; } 
-    if (n === 1) hands += "☝️";
-    if (n === 2) hands += "✌️";
-    if (n === 3) hands += "☝️☝️☝️";
-    if (n === 4) hands += "☝️☝️☝️☝️";
+    if (n===1) hands+="☝️"; else if(n===2) hands+="✌️"; else if(n===3) hands+="☝️☝️☝️"; else if(n===4) hands+="☝️☝️☝️☝️";
     return hands + " (" + num + ")";
   }
 
   function setupQuestion() {
     isAnswered = false;
-    let questionText = "";
-    let speechText = "";
+    let qText = "", sText = "";
     if (currentMode.includes('add')) {
       document.getElementById('g1').innerHTML = "👇 さいしょは...<br>" + getFingerGraphic(currentNum1);
       document.getElementById('g2').innerHTML = "👇 つぎに...<br>" + getFingerGraphic(currentNum2);
-      questionText = "あわせて いくつに なるかな？";
-      speechText = `つぎのもんだい。さいしょは、${currentNum1}。つぎに、${currentNum2}。あわせて、いくつかな？`;
+      qText = "あわせて いくつに なるかな？";
+      sText = `つぎのもんだい。さいしょは、${currentNum1}。つぎに、${currentNum2}。あわせて、いくつかな？`;
     } else {
       document.getElementById('g1').innerHTML = "👇 さいしょは...<br>" + getFingerGraphic(currentNum1);
       document.getElementById('g2').innerHTML = "👇 そこから...<br>" + getFingerGraphic(currentNum2) + " ひくと";
-      questionText = "のこりは いくつに なるかな？";
-      speechText = `つぎのもんだい。さいしょは、${currentNum1}。そこから、${currentNum2} ひくと。のこりは、いくつかな？`;
+      qText = "のこりは いくつに なるかな？";
+      sText = `つぎのもんだい。さいしょは、${currentNum1}。そこから、${currentNum2} ひくと。のこりは、いくつかな？`;
     }
-    document.getElementById('q-text').innerText = questionText;
+    document.getElementById('q-text').innerText = qText;
     document.getElementById('answer').value = "";
     document.getElementById('result').innerHTML = "";
-    document.getElementById('answer').focus();
-    speak(speechText);
+    
+    // 問題を読み上げたあとに、自動マイクモードならマイクをオンにする
+    speak(sText, function() {
+      if (isAutoMic && !isAnswered) { startMic(true); }
+    });
   }
 
   function advanceToNextQuestion() {
@@ -255,68 +200,50 @@
       currentNum2++;
       if (currentNum2 > 10) { currentNum1++; currentNum2 = 1; }
       if (currentNum1 > 9) { currentNum1 = 1; currentNum2 = 1; } 
-      localStorage.setItem('add_num1', currentNum1);
-      localStorage.setItem('add_num2', currentNum2);
+      localStorage.setItem('add_num1', currentNum1); localStorage.setItem('add_num2', currentNum2);
     } else if (currentMode === 'sub_seq') {
       currentNum1++; 
       if (currentNum1 > currentNum2 + 9) { currentNum2++; currentNum1 = currentNum2 + 1; }
       if (currentNum2 > 10) { currentNum2 = 1; currentNum1 = 2; }
-      localStorage.setItem('sub_num1', currentNum1);
-      localStorage.setItem('sub_num2', currentNum2);
-    } else if (currentMode === 'add_rand') {
-      setRandomAdd();
-    } else if (currentMode === 'sub_rand') {
-      setRandomSub();
-    }
+      localStorage.setItem('sub_num1', currentNum1); localStorage.setItem('sub_num2', currentNum2);
+    } else if (currentMode === 'add_rand') { setRandomAdd(); } else { setRandomSub(); }
     setupQuestion();
   }
 
-  // ★ 音声入力された文字列を賢く数字に変換する機能
   function normalizeAnswer(str) {
     if (!str) return NaN;
-    
-    // 1. 全角数字（１０など）を半角数字（10）に変換
-    str = str.replace(/[０-９]/g, function(s) {
-      return String.fromCharCode(s.charCodeAt(0) - 0xFEE0);
-    });
-    
-    // 2. 余計な言葉を消す
-    str = str.replace(/\s+/g, ""); // 空白を消す
-    str = str.replace(/です/g, ""); // 「〜です」を消す
-    str = str.replace(/だよ/g, "");
-
-    // 3. ひらがなや漢字の数字対応
-    const textAnswers = ['ぜろ','いち','に','さん','し','ご','ろく','なな','はち','きゅう','じゅう','じゅういち','じゅうに','じゅうさん','じゅうよん','じゅうご','じゅうろく','じゅうなな','じゅうはち','じゅうきゅう','にじゅう'];
-    const kanjiAnswers = ['〇','一','二','三','四','五','六','七','八','九','十','十一','十二','十三','十四','十五','十六','十七','十八','十九','二十'];
-    
-    if (textAnswers.includes(str)) return textAnswers.indexOf(str);
-    if (kanjiAnswers.includes(str)) return kanjiAnswers.indexOf(str);
-    if (str === 'じゅうし') return 14;
-    if (str === 'しち') return 7;
-    if (str === 'じゅうしち') return 17;
-
-    // 4. 上記でダメなら、文字の中から「数字だけ」を取り出して数値にする
+    str = str.replace(/[０-９]/g, function(s) { return String.fromCharCode(s.charCodeAt(0) - 0xFEE0); });
+    str = str.replace(/\s+/g, "").replace(/です/g, "").replace(/だよ/g, "");
+    const texts = ['ぜろ','いち','に','さん','し','ご','ろく','なな','はち','きゅう','じゅう','じゅういち','じゅうに','じゅうさん','じゅうよん','じゅうご','じゅうろく','じゅうなな','じゅうはち','じゅうきゅう','にじゅう'];
+    const kanjis = ['〇','一','二','三','四','五','六','七','八','九','十','十一','十二','十三','十四','十五','十六','十七','十八','十九','二十'];
+    if (texts.includes(str)) return texts.indexOf(str);
+    if (kanjis.includes(str)) return kanjis.indexOf(str);
+    if (str === 'じゅうし') return 14; if (str === 'しち') return 7; if (str === 'じゅうしち') return 17;
     let numStr = str.replace(/[^0-9]/g, '');
-    if (numStr.length > 0) {
-      return parseInt(numStr, 10);
-    }
-    
+    if (numStr.length > 0) return parseInt(numStr, 10);
     return NaN;
   }
 
   function checkAnswer(voiceInput) {
     if (isAnswered) return;
-    let val = voiceInput || document.getElementById('answer').value;
-    if (!val) return;
+    let inputEl = document.getElementById('answer');
+    let val = voiceInput || inputEl.value;
+    
+    // ★何も入力せずに「こたえる」を押したらキーボードを出す！
+    if (!val) {
+      inputEl.focus();
+      return;
+    }
     
     const correctAnswer = currentMode.includes('add') ? currentNum1 + currentNum2 : currentNum1 - currentNum2;
-    
-    // ★賢い変換機能を使う
     let parsedVal = normalizeAnswer(val);
-    
     let resultDiv = document.getElementById('result');
+    
     if (parsedVal === correctAnswer) {
       isAnswered = true;
+      inputEl.blur(); // 正解したらキーボードを閉じてアニメーションを見やすくする
+      if(currentRecognition) { try{ currentRecognition.stop(); } catch(e){} } // マイクも一旦おやすみ
+      
       resultDiv.style.color = "#ff1493";
       let unlocked = JSON.parse(localStorage.getItem('unlocked_kaden_math') || '[]');
       if (unlocked.length < 200) {
@@ -336,54 +263,85 @@
         resultDiv.innerHTML = '🌸 大せいかい！ 🌸<br><span style="font-size:16px;">(か電ずかんコンプリート！)</span>';
         speak("だいせいかい！ずかんコンプリートだ！");
       }
-      setTimeout(advanceToNextQuestion, 5000); 
+      setTimeout(advanceToNextQuestion, 6000); 
     } else {
       resultDiv.innerHTML = "❌ もういっかい！";
       resultDiv.style.color = "#d32f2f";
       speak("もういっかい、かぞえてみよう！");
+      // ★間違えたときはキーボードを開いたままにしておく
+      inputEl.value = "";
+      inputEl.focus();
     }
   }
 
-  function startMic() {
+  // ★「ずっと声でこたえる」モードの切り替えボタン
+  function toggleAutoMic() {
+    let btn = document.getElementById('btn-mic-auto');
+    if (isAutoMic) {
+      // ストップする
+      isAutoMic = false;
+      btn.innerHTML = "▶️ ずっと声でこたえる";
+      btn.style.backgroundColor = "#3498db"; // 青に戻す
+      if (currentRecognition) { try { currentRecognition.stop(); } catch(e){} }
+      document.getElementById('result').innerHTML = "マイクをストップしました！";
+    } else {
+      // スタートする
+      isAutoMic = true;
+      btn.innerHTML = "⏹️ 音声をストップ";
+      btn.style.backgroundColor = "#e74c3c"; // 赤にする
+      if (!isSpeaking) { startMic(true); }
+    }
+  }
+
+  function startMic(isAuto) {
+    if (isSpeaking) return; // スマホが喋っている最中は耳をふさぐ
+    if (currentRecognition) { try { currentRecognition.abort(); } catch(e){} }
+    
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!SpeechRecognition) { alert("お使いの端末はマイク認識に対応していません💦"); return; }
-    const recognition = new SpeechRecognition();
-    recognition.lang = 'ja-JP';
+    currentRecognition = new SpeechRecognition();
+    currentRecognition.lang = 'ja-JP';
     
-    // ★マイクボタンの見た目を変えて、ききとり中であることを分かりやすくする
-    let micBtn = document.getElementById('mic-btn');
-    micBtn.innerHTML = "🎤 ききとり中...";
-    micBtn.style.backgroundColor = "#e74c3c"; // 赤色に変更
-
     document.getElementById('result').innerHTML = "🎤 しゃべってね！";
     document.getElementById('result').style.color = "#3498db";
     
-    recognition.start();
+    try { currentRecognition.start(); } catch(e){}
 
-    recognition.onresult = function(event) {
+    currentRecognition.onresult = function(event) {
       const spokenText = event.results[0][0].transcript;
       document.getElementById('answer').value = spokenText;
       checkAnswer(spokenText);
     };
     
-    recognition.onerror = function() {
-      document.getElementById('result').innerHTML = "うまくききとれなかったよ！";
-      document.getElementById('result').style.color = "#7f8c8d";
-    };
-
-    // ★聞き取りが終わったら（成功・失敗にかかわらず）ボタンの色を元に戻す
-    recognition.onend = function() {
-      micBtn.innerHTML = "🎤 声でこたえる";
-      micBtn.style.backgroundColor = "#3498db"; // 元の青色に戻す
+    currentRecognition.onend = function() {
+      // 終わった後も、自動モードでまだ正解していなくて喋っていなければ再スタート
+      if (isAutoMic && !isAnswered && !isSpeaking) {
+         try { currentRecognition.start(); } catch(e){}
+      } else if (!isAutoMic && !isAnswered) {
+         document.getElementById('result').innerHTML = ""; // 手動の時はメッセージを消す
+      }
     };
   }
 
-  function speak(text) {
+  // 音声読み上げを賢くコントロールする
+  function speak(text, callback) {
     if ('speechSynthesis' in window) {
       window.speechSynthesis.cancel();
+      isSpeaking = true;
+      if (currentRecognition) { try { currentRecognition.abort(); } catch(e){} } // 自分が喋る時は耳をふさぐ
+      
       const msg = new SpeechSynthesisUtterance(text);
       msg.lang = 'ja-JP'; msg.rate = 1.15;
+      
+      msg.onend = function() {
+        isSpeaking = false;
+        if (callback) callback();
+        else if (isAutoMic && !isAnswered) { startMic(true); } // 喋り終わったら耳を開く
+      };
+      
       window.speechSynthesis.speak(msg);
+    } else if (callback) {
+      callback();
     }
   }
 
