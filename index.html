@@ -61,7 +61,7 @@
 
 <div class="container" id="game-screen" style="display: none;">
   <h2>🚂 さんすうアドベンチャー </h2>
-  <div class="subtitle" id="game-subtitle">おてて忍者クイズ！にんにん！</div>
+  <div class="subtitle" id="game-subtitle">マッチ棒を かぞえよう！</div>
 
   <div class="quiz-box">
     <div class="graphic" id="g1"></div>
@@ -164,24 +164,32 @@
   function setRandomAdd() { currentNum1 = Math.floor(Math.random()*9)+1; currentNum2 = Math.floor(Math.random()*10)+1; }
   function setRandomSub() { currentNum2 = Math.floor(Math.random()*10)+1; currentNum1 = currentNum2 + Math.floor(Math.random()*9)+1; }
 
-  function getFingerGraphic(num) {
-    let hands = "", n = num;
-    while(n >= 5) { hands += "🖐️"; n -= 5; } 
-    if (n===1) hands+="☝️"; else if(n===2) hands+="✌️"; else if(n===3) hands+="☝️☝️☝️"; else if(n===4) hands+="☝️☝️☝️☝️";
-    return hands + " (" + num + ")";
+  // ★ 指の絵文字から、本物そっくりのマッチ棒1本ずつの表示へ変更
+  function getMatchstickGraphic(num) {
+    let matches = "";
+    for (let i = 1; i <= num; i++) {
+      matches += `<div style="display:inline-block; width:8px; height:40px; background:#f3cc8b; margin:0 3px; border-radius:4px; position:relative; box-shadow: 1px 1px 2px rgba(0,0,0,0.2);">
+                    <div style="position:absolute; top:-4px; left:-2px; width:12px; height:14px; background:#e74c3c; border-radius:6px;"></div>
+                  </div>`;
+      // 5本ごとに少し隙間を空けるとさらに数えやすくなります
+      if (i % 5 === 0 && i !== num) {
+        matches += `<div style="display:inline-block; width:15px;"></div>`;
+      }
+    }
+    return `<div style="margin-top:10px;">${matches}</div><div style="font-size:18px; color:#555; margin-top:5px;">(${num})</div>`;
   }
 
   function setupQuestion() {
     isAnswered = false;
     let qText = "", sText = "";
     if (currentMode.includes('add')) {
-      document.getElementById('g1').innerHTML = "👇 さいしょは...<br>" + getFingerGraphic(currentNum1);
-      document.getElementById('g2').innerHTML = "👇 つぎに...<br>" + getFingerGraphic(currentNum2);
+      document.getElementById('g1').innerHTML = "👇 さいしょは...<br>" + getMatchstickGraphic(currentNum1);
+      document.getElementById('g2').innerHTML = "👇 つぎに...<br>" + getMatchstickGraphic(currentNum2);
       qText = "あわせて いくつに なるかな？";
       sText = `つぎのもんだい。さいしょは、${currentNum1}。つぎに、${currentNum2}。あわせて、いくつかな？`;
     } else {
-      document.getElementById('g1').innerHTML = "👇 さいしょは...<br>" + getFingerGraphic(currentNum1);
-      document.getElementById('g2').innerHTML = "👇 そこから...<br>" + getFingerGraphic(currentNum2) + " ひくと";
+      document.getElementById('g1').innerHTML = "👇 さいしょは...<br>" + getMatchstickGraphic(currentNum1);
+      document.getElementById('g2').innerHTML = "👇 そこから...<br>" + getMatchstickGraphic(currentNum2) + " ひくと";
       qText = "のこりは いくつに なるかな？";
       sText = `つぎのもんだい。さいしょは、${currentNum1}。そこから、${currentNum2} ひくと。のこりは、いくつかな？`;
     }
@@ -229,7 +237,6 @@
     let inputEl = document.getElementById('answer');
     let val = voiceInput || inputEl.value;
     
-    // ★何も入力せずに「こたえる」を押したらキーボードを出す！
     if (!val) {
       inputEl.focus();
       return;
@@ -241,8 +248,8 @@
     
     if (parsedVal === correctAnswer) {
       isAnswered = true;
-      inputEl.blur(); // 正解したらキーボードを閉じてアニメーションを見やすくする
-      if(currentRecognition) { try{ currentRecognition.stop(); } catch(e){} } // マイクも一旦おやすみ
+      inputEl.blur(); 
+      if(currentRecognition) { try{ currentRecognition.stop(); } catch(e){} } 
       
       resultDiv.style.color = "#ff1493";
       let unlocked = JSON.parse(localStorage.getItem('unlocked_kaden_math') || '[]');
@@ -263,38 +270,34 @@
         resultDiv.innerHTML = '🌸 大せいかい！ 🌸<br><span style="font-size:16px;">(か電ずかんコンプリート！)</span>';
         speak("だいせいかい！ずかんコンプリートだ！");
       }
-      setTimeout(advanceToNextQuestion, 5000); 
+      setTimeout(advanceToNextQuestion, 6000); 
     } else {
       resultDiv.innerHTML = "❌ もういっかい！";
       resultDiv.style.color = "#d32f2f";
       speak("もういっかい、かぞえてみよう！");
-      // ★間違えたときはキーボードを開いたままにしておく
       inputEl.value = "";
       inputEl.focus();
     }
   }
 
-  // ★「ずっと声でこたえる」モードの切り替えボタン
   function toggleAutoMic() {
     let btn = document.getElementById('btn-mic-auto');
     if (isAutoMic) {
-      // ストップする
       isAutoMic = false;
       btn.innerHTML = "▶️ ずっと声でこたえる";
-      btn.style.backgroundColor = "#3498db"; // 青に戻す
+      btn.style.backgroundColor = "#3498db"; 
       if (currentRecognition) { try { currentRecognition.stop(); } catch(e){} }
       document.getElementById('result').innerHTML = "マイクをストップしました！";
     } else {
-      // スタートする
       isAutoMic = true;
       btn.innerHTML = "⏹️ 音声をストップ";
-      btn.style.backgroundColor = "#e74c3c"; // 赤にする
+      btn.style.backgroundColor = "#e74c3c"; 
       if (!isSpeaking) { startMic(true); }
     }
   }
 
   function startMic(isAuto) {
-    if (isSpeaking) return; // スマホが喋っている最中は耳をふさぐ
+    if (isSpeaking) return; 
     if (currentRecognition) { try { currentRecognition.abort(); } catch(e){} }
     
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -314,21 +317,19 @@
     };
     
     currentRecognition.onend = function() {
-      // 終わった後も、自動モードでまだ正解していなくて喋っていなければ再スタート
       if (isAutoMic && !isAnswered && !isSpeaking) {
          try { currentRecognition.start(); } catch(e){}
       } else if (!isAutoMic && !isAnswered) {
-         document.getElementById('result').innerHTML = ""; // 手動の時はメッセージを消す
+         document.getElementById('result').innerHTML = ""; 
       }
     };
   }
 
-  // 音声読み上げを賢くコントロールする
   function speak(text, callback) {
     if ('speechSynthesis' in window) {
       window.speechSynthesis.cancel();
       isSpeaking = true;
-      if (currentRecognition) { try { currentRecognition.abort(); } catch(e){} } // 自分が喋る時は耳をふさぐ
+      if (currentRecognition) { try { currentRecognition.abort(); } catch(e){} } 
       
       const msg = new SpeechSynthesisUtterance(text);
       msg.lang = 'ja-JP'; msg.rate = 1.15;
@@ -336,7 +337,7 @@
       msg.onend = function() {
         isSpeaking = false;
         if (callback) callback();
-        else if (isAutoMic && !isAnswered) { startMic(true); } // 喋り終わったら耳を開く
+        else if (isAutoMic && !isAnswered) { startMic(true); } 
       };
       
       window.speechSynthesis.speak(msg);
